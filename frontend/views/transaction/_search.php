@@ -21,9 +21,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'is_incoming')->checkbox() ?>
 
+    <?= $form->field($model, 'user_id') ?>
+
     <?= $form->field($model, 'account_user') ?>
 
-    <?= $form->field($model, 'account_system') ?>
+    <?php // echo $form->field($model, 'account_system') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 

@@ -16,10 +16,20 @@ class m190314_053711_transaction extends Migration
             'id' => $this->primaryKey(),
             'amount' => $this->decimal()->notNull()->defaultValue(0)->check('amount >= 0'),
             'is_incoming' => $this->boolean()->notNull()->defaultValue(true),
+            'user_id' => $this->integer()->notNull(),
             'account_user' => $this->integer()->notNull(),
             'account_system' => $this->integer()->notNull(),
             'created_at' => $this->dateTime()->notNull()->defaultValue('now()'),
         ]);
+
+        $this->addForeignKey(
+            'fk-transaction-usr_id',
+            'transaction',
+            'user_id',
+            'user',
+            'id',
+            'CASCADE'
+        );
 
         $this->addForeignKey(
             'fk-transaction-account_user_id',

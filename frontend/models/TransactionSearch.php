@@ -17,7 +17,7 @@ class TransactionSearch extends Transaction
     public function rules()
     {
         return [
-            [['id', 'account_user', 'account_system'], 'integer'],
+            [['id', 'user_id', 'account_user', 'account_system'], 'integer'],
             [['amount'], 'number'],
             [['is_incoming'], 'boolean'],
             [['created_at'], 'safe'],
@@ -63,6 +63,7 @@ class TransactionSearch extends Transaction
             'id' => $this->id,
             'amount' => $this->amount,
             'is_incoming' => $this->is_incoming,
+            'user_id' => $this->user_id,
             'account_user' => $this->account_user,
             'account_system' => $this->account_system,
             'created_at' => $this->created_at,

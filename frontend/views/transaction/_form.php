@@ -16,6 +16,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'is_incoming')->checkbox() ?>
 
+    <?= $form->field($model, 'user_id')->textInput() ?>
+
     <?= $form->field($model, 'account_user')->textInput() ?>
 
     <?= $form->field($model, 'account_system')->textInput() ?>

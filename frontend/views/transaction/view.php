@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'amount',
             'is_incoming:boolean',
+            'user_id',
             'account_user',
             'account_system',
             'created_at',
