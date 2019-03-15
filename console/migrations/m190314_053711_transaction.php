@@ -19,7 +19,7 @@ class m190314_053711_transaction extends Migration
             'user_id' => $this->integer()->notNull(),
             'account_user' => $this->integer()->notNull(),
             'account_system' => $this->integer()->notNull(),
-            'created_at' => $this->dateTime()->notNull()->defaultValue('now()'),
+            'created_at' => $this->dateTime()->notNull()->defaultExpression('now()'),
         ]);
 
         $this->addForeignKey(

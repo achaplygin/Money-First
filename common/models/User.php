@@ -17,6 +17,7 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property boolean $is_admin
  * @property string $auth_key
+ * @property string $auth_token
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -192,5 +193,39 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * Generates new auth token with timestamp
+     * @throws \yii\base\Exception
+     */
+    public function generateAuthToken()
+    {
+        $this->auth_token = Yii::$app->security->generateRandomString() . '_' . time();
+        $this->save();
+    }
+
+    /**
+     * Removes auth token with timestamp
+     */
+    public function removeAuthToken()
+    {
+        $this->auth_token = null;
+        $this->save();
+    }
+
+    /**
+     * Finds out if auth token is valid
+     * @param $token
+     * @return bool
+     */
+    public static function isAuthTokenValid($token)
+    {
+        if (empty($token)) {
+            return false;
+        }
+        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $expire = 300;
+        return $timestamp + $expire >= time();
     }
 }

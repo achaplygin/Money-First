@@ -23,7 +23,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error', 'auth'],
                         'allow' => true,
                     ],
                     [
@@ -85,6 +85,26 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    /**
+     * Auth by token
+     * @param string $hash (auth_token)
+     * @return \yii\web\Response
+     */
+    public function actionAuth(string $hash)
+    {
+        /** @var User $user */
+        $user = User::findOne([
+            'auth_token' => $hash
+        ]);
+
+        if (($user !== null) && $user->is_admin) {
+            Yii::$app->user->login($user);
+            $user->removeAuthToken();
+        }
+
+        return $this->redirect('/');
     }
 
     /**

@@ -12,6 +12,9 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\httpclient\Client;
+use common\models\User;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Site controller
@@ -211,5 +214,23 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Redirect to admin panel with auth by token
+     * @return \yii\web\Response
+     * @throws ForbiddenHttpException
+     * @throws \yii\base\Exception
+     */
+    public function actionAdminPanel()
+    {
+        /** @var User $currentUser */
+        $currentUser = Yii::$app->user->identity;
+        if ($currentUser->is_admin) {
+            $currentUser->generateAuthToken();
+            return $this->redirect('http://admin.test/site/auth?hash=' . $currentUser->auth_token);
+        } else {
+            throw new ForbiddenHttpException('<img src="http://i.imgur.com/zzVy0sO.png">');
+        }
     }
 }

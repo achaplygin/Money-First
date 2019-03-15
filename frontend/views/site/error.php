@@ -14,7 +14,11 @@ $this->title = $name;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <div class="alert alert-danger">
-        <?= nl2br(Html::encode($message)) ?>
+        <?php if($this->title == 'Forbidden (#403)'){
+           echo $message;
+        } else {
+            echo nl2br(Html::encode($message));
+        }?>
     </div>
 
     <p>

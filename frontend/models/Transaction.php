@@ -41,7 +41,7 @@ class Transaction extends \yii\db\ActiveRecord
             [['user_id', 'account_user', 'account_system'], 'required'],
             [['user_id', 'account_user', 'account_system'], 'default', 'value' => null],
             [['user_id', 'account_user', 'account_system'], 'integer'],
-            [['created_at'], 'safe'],
+//            [['created_at'], 'safe'],
             [['account_user'], 'exist', 'skipOnError' => true, 'targetClass' => Account::className(), 'targetAttribute' => ['account_user' => 'id']],
             [['account_system'], 'exist', 'skipOnError' => true, 'targetClass' => Account::className(), 'targetAttribute' => ['account_system' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -60,7 +60,7 @@ class Transaction extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'account_user' => 'Account User',
             'account_system' => 'Account System',
-            'created_at' => 'Created At',
+//            'created_at' => 'Created At',
         ];
     }
 

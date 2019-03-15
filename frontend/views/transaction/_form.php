@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'amount')->textInput() ?>
 
-    <?= $form->field($model, 'is_incoming')->checkbox() ?>
+<!--    <?//= $form->field($model, 'is_incoming')->checkbox() ?>-->
 
     <?= $form->field($model, 'user_id')->textInput() ?>
 
@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'account_system')->textInput() ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+    <!--<?/*= $form->field($model, 'created_at')->textInput() */?>-->
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
