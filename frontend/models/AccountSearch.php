@@ -46,6 +46,9 @@ class AccountSearch extends Account
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
 
         $this->load($params);
@@ -59,7 +62,7 @@ class AccountSearch extends Account
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            'user_id' => \Yii::$app->user->id,
             'balance' => $this->balance,
         ]);
 

@@ -13,23 +13,25 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="account-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Create Account', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
+    <?php
+        $a= new yii\grid\ActionColumn();
+        $a->buttonOptions=[['view', 'update'], 'isVisible' => false]
+    ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'layout'=> "{items}\n{pager}",
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
-            'user_id',
             'balance',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+            'visibleButtons' => ['update'=>false, 'view'=>true, 'delete'=>false],
+            ]
         ],
     ]); ?>
+
+
 </div>

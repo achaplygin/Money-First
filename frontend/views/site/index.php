@@ -3,6 +3,8 @@
 
 use common\models\User;
 use yii\helpers\Url;
+use common\widgets\UserAccounts;
+use frontend\models\AccountSearch;
 
 $this->title = 'Money First';
 if (Yii::$app->user->isGuest) {
@@ -40,7 +42,11 @@ if (Yii::$app->user->isGuest) {
     </div >
 </div >
 <?php }else{
-    echo '<br>Привет ';
     $loggeduser=User::findOne(Yii::$app->user->id);
-    echo $loggeduser->username.'<br>';
+    echo '<div class="col-lg-9" >'
+        .'<br>Привет '.$loggeduser->username.'<br>'
+        .'</div>'
+        .'<div class="col-lg-3" align="right">'
+        .UserAccounts::widget()
+        .'</div>';
 }
