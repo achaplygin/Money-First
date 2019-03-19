@@ -17,13 +17,14 @@ class m190314_053711_transaction extends Migration
             'amount' => $this->decimal()->notNull()->defaultValue(0)->check('amount >= 0'),
             'is_incoming' => $this->boolean()->notNull()->defaultValue(true),
             'user_id' => $this->integer()->notNull(),
-            'account_user' => $this->integer()->notNull(),
-            'account_system' => $this->integer()->notNull(),
+            'account_id' => $this->integer()->notNull(),
+            'balance_after_from' => $this->decimal()->notNull()->check('amount >= 0'),
+            'balance_after_to' => $this->decimal()->notNull()->check('amount >= 0'),
             'created_at' => $this->dateTime()->notNull()->defaultExpression('now()'),
         ]);
 
         $this->addForeignKey(
-            'fk-transaction-usr_id',
+            'fk-transaction-user_id',
             'transaction',
             'user_id',
             'user',
@@ -32,22 +33,14 @@ class m190314_053711_transaction extends Migration
         );
 
         $this->addForeignKey(
-            'fk-transaction-account_user_id',
+            'fk-transaction-account_id',
             'transaction',
-            'account_user',
+            'account_id',
             'account',
             'id',
             'CASCADE'
         );
 
-        $this->addForeignKey(
-            'fk-transaction-account_system_id',
-            'transaction',
-            'account_system',
-            'account',
-            'id',
-            'CASCADE'
-        );
     }
 
     /**
@@ -55,8 +48,8 @@ class m190314_053711_transaction extends Migration
      */
     public function down()
     {
-        $this->dropForeignKey('fk-transaction-account_user_id', 'transaction');
-        $this->dropForeignKey('fk-transaction-account_system_id', 'transaction');
+        $this->dropForeignKey('fk-transaction-user_id', 'transaction');
+        $this->dropForeignKey('fk-transaction-account_id', 'transaction');
         $this->dropTable('{{%transaction}}');
     }
 

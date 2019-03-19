@@ -12,7 +12,6 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use yii\httpclient\Client;
 use common\models\User;
 use yii\web\ForbiddenHttpException;
 
@@ -232,5 +231,20 @@ class SiteController extends Controller
         } else {
             throw new ForbiddenHttpException('<img src="http://i.imgur.com/zzVy0sO.png">');
         }
+    }
+
+    public function actionAuth(string $hash)
+    {
+        /** @var User $user */
+        $user = User::findOne([
+            'auth_token' => $hash
+        ]);
+
+        if (($user !== null)) {
+            Yii::$app->user->login($user);
+            $user->removeAuthToken();
+        }
+
+        return $this->redirect('/');
     }
 }

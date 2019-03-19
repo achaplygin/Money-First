@@ -1,17 +1,6 @@
 <?php
 
-use common\models\Transaction;
 use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
-
-
-$history = Transaction::find()->select('created_at, amount, is_incoming, account_id, balance_after_to, balance_after_from')->where(['user_id' => Yii::$app->user->getId()])->orderBy('created_at DESC');
-$dataProvider = new ActiveDataProvider([
-    'query' => $history,
-    'pagination' => [
-        'pageSize' => 10,
-    ],
-]);
 
 echo GridView::widget([
     'dataProvider' => $dataProvider,

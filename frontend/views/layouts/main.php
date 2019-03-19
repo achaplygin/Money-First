@@ -44,26 +44,23 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Account', 'url' => ['/account/']],
-            ['label' => 'Transaction', 'url' => ['/transaction/']],
         ];
         $user=User::findOne(Yii::$app->user->id);
-        if ($user->is_admin){
-            $menuItems = [
-                ['label' => 'Home', 'url' => ['/site/index']],
-                ['label' => 'About', 'url' => ['/site/about']],
-                ['label' => 'Contact', 'url' => ['/site/contact']],
-                ['label' => 'Account', 'url' => ['/account/']],
-                ['label' => 'Transaction', 'url' => ['/transaction/']],
-                ['label' => 'Admin Panel', 'url' => ['/site/admin-panel']],
-            ];
-
+        if ($user->is_admin) {
+            $menuItems[] = '<li>'
+                . Html::beginForm(['/site/admin-panel'], 'get')
+                . Html::submitButton(
+                    'Admin Panel',
+                    ['class' => 'btn btn-danger logout']
+                )
+                . Html::endForm()
+                . '</li>';
         }
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
                 'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn-success logout']
+                ['class' => 'btn btn-success logout']
             )
             . Html::endForm()
             . '</li>';
@@ -79,7 +76,6 @@ AppAsset::register($this);
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
-        <br>front<br>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>

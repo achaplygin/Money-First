@@ -2,25 +2,24 @@
 
 namespace frontend\widgets;
 
+use common\models\Account;
 use Yii;
-use frontend\models\AccountSearch;
 
 /**
- * Class UserAccounts
+ * Class UserAccount
  * @package common\widgets
  */
-class UserAccounts extends \yii\bootstrap\Widget
+class UserAccount extends \yii\bootstrap\Widget
 {
-    public $dataProvider;
-    public $searchModel;
+
+    public $balance;
 
     /**
      * Inits $searchModel & dataProvider;
      */
     public function init()
     {
-        $this->searchModel = new AccountSearch();
-        $this->dataProvider = $this->searchModel->search(Yii::$app->request->queryParams);
+        $this->balance = Account::findOne(['user_id' => Yii::$app->user->getId()])->balance;
     }
 
     /**
@@ -29,8 +28,7 @@ class UserAccounts extends \yii\bootstrap\Widget
      */
     public function run()
     {
-        return $this->render('user-accounts', ['searchModel' => $this->searchModel, 'dataProvider' => $this->dataProvider]);
-//        return Yii::$app->view->renderFile('@frontend/views/widgets/UserAccounts.php', ['searchModel' => $this->searchModel, 'dataProvider' => $this->dataProvider]);
+        return $this->render('user-account', ['balance' => $this->balance]);
     }
 
 }

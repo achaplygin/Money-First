@@ -1,7 +1,58 @@
 <?php
+namespace frontend\models;
+
+use Yii;
+use common\models\Transaction;
+use yii\base\Model;
+use common\models\User;
+
 /**
- * Created by PhpStorm.
- * User: achaplygin
- * Date: 19.03.19
- * Time: 15:32
+ * Signup form
  */
+class CreateTransactionForm extends Model
+{
+    public $amount;
+    public $email;
+    public $password;
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            ['username', 'trim'],
+            ['username', 'required'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'string', 'min' => 2, 'max' => 255],
+
+            ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+
+            ['password', 'required'],
+            ['password', 'string', 'min' => 6],
+        ];
+    }
+
+    /**
+     * Signs user up.
+     *
+     * @return User|null the saved model or null if saving fails
+     */
+    public function create()
+    {
+        $model = new Transaction();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+}

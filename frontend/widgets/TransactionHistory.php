@@ -1,7 +1,41 @@
 <?php
+
+namespace frontend\widgets;
+
+use common\models\Transaction;
+use yii\data\ActiveDataProvider;
+use Yii;
+
 /**
- * Created by PhpStorm.
- * User: achaplygin
- * Date: 19.03.19
- * Time: 12:25
+ * Class UserAccount
+ * @package common\widgets
  */
+class TransactionHistory extends \yii\bootstrap\Widget
+{
+
+    public $dataProvider;
+
+    /**
+     * Inits $searchModel & dataProvider;
+     */
+    public function init()
+    {
+        $history = Transaction::find()->select('created_at, amount, is_incoming, account_id, balance_after_to, balance_after_from')->where(['user_id' => Yii::$app->user->getId()])->orderBy('created_at DESC');
+        $this->dataProvider = new ActiveDataProvider([
+            'query' => $history,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+    }
+
+    /**
+     * render view file
+     * @return string
+     */
+    public function run()
+    {
+        return $this->render('transaction-history', ['dataProvider' => $this->dataProvider]);
+    }
+
+}

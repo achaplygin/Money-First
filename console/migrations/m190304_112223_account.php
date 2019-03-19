@@ -27,7 +27,7 @@ class m190304_112223_account extends Migration
             'id',
             'CASCADE'
         );
-        $admin=User::findByUsername('admin');
+        $admin = User::findByUsername('admin');
         $this->insert('account', [
             'user_id' => $admin->getId(),
             'balance' => 1000000,
