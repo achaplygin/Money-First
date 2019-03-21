@@ -6,7 +6,6 @@ use Yii;
 use yii\web\Controller;
 use frontend\models\UserTransaction;
 
-
 /**
  * Transaction controller
  */
@@ -17,13 +16,16 @@ class TransactionController extends Controller
         $model = new UserTransaction();
         $model->user_id = Yii::$app->user->getId();
 
-        if ($model->load(Yii::$app->request->post()) && $model->createUserTransaction()) {
-            return $this->goHome();
+        if ($model->load(Yii::$app->request->post())) {
+            try {
+                $model->createUserTransaction();
+                Yii::$app->session->setFlash('createUserTransaction', 'ok');
+            } catch (\Exception $e) {
+                Yii::$app->session->setFlash('createUserTransaction', $e->getMessage());
+            }
         } else {
-
-            return $this->render('create', [
-                'model' => $model, 'message' => $model->createUserTransaction()
-            ]);
+            Yii::$app->session->setFlash('createUserTransaction', 'Please fill out the following form');
         }
+        return $this->render('create', ['model' => $model]);
     }
 }

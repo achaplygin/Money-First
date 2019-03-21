@@ -27,11 +27,22 @@ class m190304_112223_account extends Migration
             'id',
             'CASCADE'
         );
-        $admin = User::findByUsername('admin');
-        $this->insert('account', [
-            'user_id' => $admin->getId(),
+
+        $admin = new User();
+        $admin->username = 'admin';
+        $admin->email = 'admin@example.com';
+        $admin->setPassword('123456');
+        $admin->generateAuthKey();
+        $admin->save();
+
+        $this->update('{{%user}}', [
+            'is_admin' => true
+        ],"username='admin'");
+
+//        $admin = User::findByUsername('admin');
+        $this->update('account', [
             'balance' => 1000000,
-        ]);
+        ], ['user_id' => $admin->getId()]);
     }
 
     /**
@@ -39,7 +50,7 @@ class m190304_112223_account extends Migration
      */
     public function down()
     {
-        $this->dropForeignKey('fk-account-usr_id', 'transaction');
+        $this->dropForeignKey('fk-account-usr_id', 'account');
         $this->dropTable('{{%account}}');
     }
 

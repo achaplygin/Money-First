@@ -2,6 +2,7 @@
 
 namespace frontend\widgets;
 
+use common\models\Account;
 use common\models\Transaction;
 use yii\data\ActiveDataProvider;
 use Yii;
@@ -20,12 +21,17 @@ class TransactionHistory extends \yii\bootstrap\Widget
      */
     public function init()
     {
-        $history = Transaction::find()->select('created_at, amount, is_incoming, account_id, balance_after_to, balance_after_from')->where(['user_id' => Yii::$app->user->getId()])->orderBy('created_at DESC');
+        $history = Transaction::find()
+            ->select('created_at, amount, is_incoming, account_from, account_to, balance_after_to, balance_after_from')
+            ->where(['user_id' => Yii::$app->user->getId()])
+            ->orWhere(['account_to' => Account::findOne(['user_id' => Yii::$app->user->getId()])])
+            ->orderBy('created_at DESC');
         $this->dataProvider = new ActiveDataProvider([
             'query' => $history,
             'pagination' => [
                 'pageSize' => 10,
             ],
+            'sort' => false,
         ]);
     }
 

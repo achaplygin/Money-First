@@ -1,14 +1,15 @@
 <?php
 
 use yii\grid\GridView;
+use common\models\Account;
 
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'rowOptions' => function ($model) {
-        if ($model->is_incoming) {
-            $style = 'background: #fdd;';
-        } else {
+        if ($model->account_to == Yii::$app->user->identity->account->id) {
             $style = 'background: #dfd;';
+        } else {
+            $style = 'background: #fdd;';
         }
         return [
             'style' => $style,
@@ -18,15 +19,36 @@ echo GridView::widget([
         [
             'class' => 'yii\grid\SerialColumn',
             'contentOptions' => [
-            'style' => 'background: #fff'],
+                'style' => 'background: #fff'],
         ],
-        'created_at',
-        'amount',
-        'account_id',
+        [
+            'label' => 'Operation Time',
+            'attribute' => 'created_at',
+        ],
+        [
+            'label' => 'Amount',
+            'content' => function ($model) {
+                return '$ ' . $model->amount;
+            },
+            'contentOptions' => ['style' => 'font-weight: bold;']
+        ],
+        [
+            'label' => 'to Account',
+            'content' => function ($model) {
+                $list = Account::getSystemAccountList();
+                $idx = $model->account_to;
+                $label = $list[$idx];
+                return $label;
+            }
+        ],
         [
             'label' => 'Balance After',
             'content' => function ($model) {
-                return '$ '.$balance_after=($model->is_incoming) ? $model->balance_after_from : $model->balance_after_to;
+                if ($model->account_to == Yii::$app->user->identity->account->id) {
+                    return '$ ' . $model->balance_after_to;
+                } else {
+                    return '$ ' . $model->balance_after_from;
+                }
             },
         ],
     ],

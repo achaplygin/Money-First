@@ -2,8 +2,8 @@
 
 namespace frontend\models;
 
-use common\models\Account;
 use Yii;
+use common\models\Account;
 use common\models\Transaction;
 
 /**
@@ -12,34 +12,43 @@ use common\models\Transaction;
  */
 class UserTransaction extends Transaction
 {
-    /**
-     * @return bool
-     */
+
     public function createUserTransaction()
     {
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
 
-            $systemAccount = Account::findOne($this->account_id);
-            $userAccount = Account::findOne($this->user_id);
+            $this->account_from=Yii::$app->user->identity->account->id;
+            if ($this->account_to == $this->account_from){
+                throw new \Exception('Ты серьёзно? Это ж твой счёт!');
+            }
+
+            $systemAccount = Account::findOne($this->account_to);
             $systemAccount->balance += (float)$this->amount;
-            $userAccount->balance -= (float)$this->amount;
-
-            $this->balance_after_from = $userAccount->balance;
             $this->balance_after_to = $systemAccount->balance;
-            $this->created_at = date('Y-m-d H:i:s', time());
-            $this->is_incoming=true;
 
-            $userAccount->save();
-            $systemAccount->save();
-            $this->save();
+            $userAccount = Account::findOne($this->account_from);
+            $userAccount->balance -= (float)$this->amount;
+            $this->balance_after_from = $userAccount->balance;
+
+            $this->created_at = date('Y-m-d H:i:s', time());
+            $this->is_incoming = true;
+
+            if (!$this->save()) {
+                throw new \Exception('Error on Transaction->save()');
+            }
+            if (!$userAccount->save()) {
+                throw new \Exception('Error on userAccount->save()');
+            }
+            if (!$systemAccount->save()) {
+                throw new \Exception('Error on systemAccount->save()');
+            }
 
             $transaction->commit();
-            return true;
         } catch (\Exception $e) {
             $transaction->rollBack();
-            return false;
+            throw $e;
         }
     }
 }

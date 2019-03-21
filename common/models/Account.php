@@ -13,6 +13,7 @@ use Yii;
  *
  * @property User $user
  * @property Transaction[] $transactions
+ * @property Transaction[] $transactions0
  */
 class Account extends \yii\db\ActiveRecord
 {
@@ -63,6 +64,28 @@ class Account extends \yii\db\ActiveRecord
      */
     public function getTransactions()
     {
-        return $this->hasMany(Transaction::className(), ['account_id' => 'id']);
+        return $this->hasMany(Transaction::className(), ['account_from' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTransactions0()
+    {
+        return $this->hasMany(Transaction::className(), ['account_to' => 'id']);
+    }
+
+    /**
+     * @return array
+     */
+    public function getSystemAccountList()
+    {
+        return Account::find()
+            ->select(["CONCAT(username,'_',account.id) as account_label", 'account.id as account_id'])
+            ->joinWith('user',false, 'JOIN')
+            ->andWhere(['is_admin' => true])
+            ->orderBy('account_id')
+            ->indexBy('account_id')
+            ->asArray(true)->column();
     }
 }

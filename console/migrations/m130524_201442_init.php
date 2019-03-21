@@ -26,16 +26,6 @@ class m130524_201442_init extends Migration
             'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
 
-        $admin = new User();
-        $admin->username = 'admin';
-        $admin->email = 'admin@example.com';
-        $admin->setPassword('123456');
-        $admin->generateAuthKey();
-        $admin->save();
-
-        $this->update('{{%user}}', [
-            'is_admin' => true
-        ],"username='admin'");
     }
 
     public function down()
