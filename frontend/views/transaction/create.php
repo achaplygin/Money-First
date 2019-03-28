@@ -14,8 +14,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-lg-9">
             <h1><?= Html::encode($this->title) ?></h1>
             <div class="col-lg-6">
-                <?= Yii::$app->session->getFlash('createUserTransaction') ?>
-                <?= Alert::widget() ?>
+
+                <?= Alert::widget([
+                        'alertTypes' => [
+                            'createUserTransaction' => 'alert-info'
+                        ],
+                ]) ?>
                 <?php $form = ActiveForm::begin(['id' => 'transaction-create-form']); ?>
 
                 <?= $form->field($model, 'amount')->textInput(['autofocus' => true]) ?>

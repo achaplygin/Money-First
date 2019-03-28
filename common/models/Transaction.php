@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "transaction".
@@ -39,22 +40,37 @@ class Transaction extends \yii\db\ActiveRecord
         return [
             [['amount', 'balance_after_from', 'balance_after_to'], 'number'],
             [['amount'], 'compare', 'compareValue' => 0, 'operator' => '>'],
-            ['amount', function ($attribute, $params, $validator) {
-                if (Yii::$app->user->identity->account->balance < $this->$attribute) {
-                    $this->addError($attribute, 'No money.');
-                };
-            }],
             [['is_incoming'], 'boolean'],
-            [['user_id', 'account_from', 'account_to', 'balance_after_from', 'balance_after_to'], 'required'],
+            [['amount', 'user_id', 'account_from', 'account_to', 'balance_after_from', 'balance_after_to'], 'required'],
             [['user_id', 'account_from', 'account_to'], 'default', 'value' => null],
             [['user_id', 'account_from', 'account_to'], 'integer'],
             [['created_at'], 'safe'],
-            [['account_from'], 'exist', 'skipOnError' => true, 'targetClass' => Account::className(), 'targetAttribute' => ['account_from' => 'id']],
-            [['account_to'], 'exist', 'skipOnError' => true, 'targetClass' => Account::className(), 'targetAttribute' => ['account_to' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['account_from'], 'exist', 'skipOnError' => true, 'targetClass' => Account::class, 'targetAttribute' => ['account_from' => 'id']],
+            [['account_to'], 'exist', 'skipOnError' => true, 'targetClass' => Account::class, 'targetAttribute' => ['account_to' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+
+            ['amount', function ($attribute) {
+                if ($this->accountFrom->balance < $this->$attribute) {
+                    $this->addError($attribute, 'Not enough money.');
+                };
+            }],
         ];
     }
 
+//    public function behaviors()
+//    {
+//        $behaviors = parent::behaviors();
+//
+//        // todo: разобраться со сраными поведениями!!!11!1адын!!!11
+//        $behaviors[] = [
+//            'class' => TimestampBehavior::class,
+//            'value' => function () {
+//                return date('Y-m-d H:i:s', time());
+//            },
+//        ];
+//
+//        return $behaviors;
+//    }
 
     /**
      * {@inheritdoc}
@@ -95,6 +111,15 @@ class Transaction extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function isIncome(User $user): bool
+    {
+        return $this->account_to === $user->account->id;
     }
 }

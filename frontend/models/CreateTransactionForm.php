@@ -7,7 +7,7 @@ use yii\base\Model;
 use common\models\User;
 
 /**
- * Signup form
+ * Create User Transaction form
  */
 class CreateTransactionForm extends Model
 {

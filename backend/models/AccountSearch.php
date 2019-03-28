@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\User;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Account;
@@ -11,6 +12,7 @@ use common\models\Account;
  */
 class AccountSearch extends Account
 {
+
     /**
      * {@inheritdoc}
      */
@@ -40,7 +42,7 @@ class AccountSearch extends Account
      */
     public function search($params)
     {
-        $query = Account::find();
+        $query = Account::find()->joinWith('user')->orderBy('user_id');
 
         // add conditions that should always apply here
 
@@ -59,10 +61,12 @@ class AccountSearch extends Account
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
             'balance' => $this->balance,
+            'user_id' => $this->user_id,
+//            'username' => $this->username,
         ]);
 
         return $dataProvider;
     }
+
 }

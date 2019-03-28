@@ -6,8 +6,14 @@ return [
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
+        'formatter' => [
+            'dateFormat' => 'dd.MM.yyyy',
+            'thousandSeparator' => '&nbsp;',
+            'currencyCode' => '$',
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
     ],
 ];
+

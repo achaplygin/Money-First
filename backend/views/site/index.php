@@ -2,51 +2,62 @@
 
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
-use common\models\Account;
-use frontend\widgets\UserAccount;
-use common\models\User;
+use backend\models\AccountSearch;
+use yii\helpers\Html;
+use backend\models\UploadForm;
+
 
 /* @var $this yii\web\View */
 
 $this->title = 'My Yii Application';
 
-$contractors = Account::find()->joinWith('user', true)/*->andWhere('NOT "user".is_admin')*/;
-$dataProvider = new ActiveDataProvider([
-    'query' => $contractors,
-    'pagination' => [
-        'pageSize' => 15,
-    ],
-    'sort' => [
-        'attributes' => [
-            'id',
-            'user_id',
-            'user.username',
-            'balance',
-            'user.email',
-        ]
-    ]
-]);
+//$searchModel = AccountSearch::find()->orderBy('user_id');
+//$dataProvider = new ActiveDataProvider([
+//    'query' => $searchModel,
+//    'pagination' => [
+//        'pageSize' => 15,
+//    ],
+//    'sort' => [
+//        'attributes' => [
+//            'id',
+//            'user_id',
+//            'balance',
+//            'username',
+//            'email',
+//        ]
+//    ]
+//]);
 
+$searchModel = new AccountSearch();
+$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+$dataProvider->pagination = ['pageSize' => 15];
+$dataProvider->sort = [
+    'attributes' => [
+        'id',
+        'user_id',
+        'balance',
+        'username',
+        'email',
+    ]];
 
 ?>
+<div>
+    <div class="col-lg-5">
+        <?php echo $this->render('../account/_search', ['model' => $searchModel]); ?>
+    </div>
+    <div class="col-lg-5">
+        <?php echo Html::a('file/import', ['file/upload'], ['class' => 'btn btn-primary']); ?>
+    </div>
+</div>
 <div class="site-index">
-    Привет :)
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $contractors,
         'layout' => "{items}\n{pager}",
         'columns' => [
             'user_id',
-            'user.username:raw:Username',
-            'user.email:raw:Email',
-            [
-                'attribute' => 'user.is_admin',
-                'filter' => array("0"=>'false',"1"=>'true'),
-                'content' => function ($model){
-                    return $model->user->is_admin ? 'true' : 'false';
-                },
-            ],
-            'id:raw:Account Id',
+            'username',
+            'email',
+            'id:integer:Account Id',
             'balance',
         ],
     ]) ?>

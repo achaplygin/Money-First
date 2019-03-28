@@ -22,7 +22,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['login', 'error', 'auth'],
@@ -40,7 +40,7 @@ class SiteController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -71,9 +71,10 @@ class SiteController extends Controller
     }
 
     /**
-     * Login action.
+     * If user is not admin, logout and redirect to user section with authentication by token.
      *
-     * @return string
+     * @return string|\yii\web\Response
+     * @throws \yii\base\Exception
      */
     public function actionLogin()
     {
@@ -83,9 +84,9 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            /** @var User $currentUser */
-            $current_user=Yii::$app->user->identity;
-            if (!$current_user->is_admin){
+            /** @var User $current_user */
+            $current_user = Yii::$app->user->identity;
+            if (!$current_user->is_admin) {
                 $current_user->generateAuthToken();
                 Yii::$app->user->logout();
                 return $this->redirect('http://first.test/site/auth?hash=' . $current_user->auth_token);

@@ -14,12 +14,13 @@ class TransactionController extends Controller
     public function actionCreate()
     {
         $model = new UserTransaction();
-        $model->user_id = Yii::$app->user->getId();
+        $model->user_id = Yii::$app->user->id;
 
         if ($model->load(Yii::$app->request->post())) {
             try {
                 $model->createUserTransaction();
                 Yii::$app->session->setFlash('createUserTransaction', 'ok');
+                return $this->goBack();
             } catch (\Exception $e) {
                 Yii::$app->session->setFlash('createUserTransaction', $e->getMessage());
             }

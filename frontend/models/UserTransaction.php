@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\models\User;
 use Yii;
 use common\models\Account;
 use common\models\Transaction;
@@ -12,15 +13,15 @@ use common\models\Transaction;
  */
 class UserTransaction extends Transaction
 {
-
-    public function createUserTransaction()
+    public function createUserTransaction(): void
     {
-
         $transaction = Yii::$app->db->beginTransaction();
-        try {
 
-            $this->account_from=Yii::$app->user->identity->account->id;
-            if ($this->account_to == $this->account_from){
+        try {
+            /** @var User $usr */
+            $usr = Yii::$app->user->identity;
+            $this->account_from = $usr->account->id;
+            if ((int) $this->account_to === (int) $this->account_from) {
                 throw new \Exception('Ты серьёзно? Это ж твой счёт!');
             }
 
@@ -32,11 +33,11 @@ class UserTransaction extends Transaction
             $userAccount->balance -= (float)$this->amount;
             $this->balance_after_from = $userAccount->balance;
 
-            $this->created_at = date('Y-m-d H:i:s', time());
             $this->is_incoming = true;
 
             if (!$this->save()) {
-                throw new \Exception('Error on Transaction->save()');
+                $ex = new \Exception('Error on Transaction->save()');
+                throw $ex;
             }
             if (!$userAccount->save()) {
                 throw new \Exception('Error on userAccount->save()');

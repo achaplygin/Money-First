@@ -37,12 +37,13 @@ class m190304_112223_account extends Migration
 
         $this->update('{{%user}}', [
             'is_admin' => true
-        ],"username='admin'");
+        ], "username='admin'");
 
-//        $admin = User::findByUsername('admin');
-        $this->update('account', [
-            'balance' => 1000000,
-        ], ['user_id' => $admin->getId()]);
+        $this->update(
+            'account',
+            ['balance' => 1e6],
+            ['user_id' => $admin->id]
+        );
     }
 
     /**

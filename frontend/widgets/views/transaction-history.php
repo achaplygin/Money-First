@@ -3,52 +3,47 @@
 use yii\grid\GridView;
 use common\models\Account;
 
+$list = Account::getSystemAccountList();
+
 echo GridView::widget([
     'dataProvider' => $dataProvider,
-    'rowOptions' => function ($model) {
-        if ($model->account_to == Yii::$app->user->identity->account->id) {
-            $style = 'background: #dfd;';
-        } else {
-            $style = 'background: #fdd;';
-        }
+    'rowOptions' => function (\common\models\Transaction $model) {
+
+        /** @var \common\models\User $user */
+        $user = Yii::$app->user->identity;
         return [
-            'style' => $style,
+            'style' => $model->isIncome($user) ? 'background: #dfd;' : 'background: #fdd;',
         ];
     },
     'columns' => [
         [
             'class' => 'yii\grid\SerialColumn',
             'contentOptions' => [
-                'style' => 'background: #fff'],
+                'style' => 'background: #fff',
+            ],
         ],
         [
             'label' => 'Operation Time',
             'attribute' => 'created_at',
         ],
         [
+            'attribute' => 'amount',
+            'format' => 'currency',
             'label' => 'Amount',
-            'content' => function ($model) {
-                return '$ ' . $model->amount;
-            },
-            'contentOptions' => ['style' => 'font-weight: bold;']
+            'contentOptions' => ['style' => 'font-weight: bold;'],
         ],
         [
             'label' => 'to Account',
-            'content' => function ($model) {
-                $list = Account::getSystemAccountList();
-                $idx = $model->account_to;
-                $label = $list[$idx];
-                return $label;
+            'content' => function ($model) use ($list) {
+                return $list[$model->account_to];
             }
         ],
         [
             'label' => 'Balance After',
             'content' => function ($model) {
-                if ($model->account_to == Yii::$app->user->identity->account->id) {
-                    return '$ ' . $model->balance_after_to;
-                } else {
-                    return '$ ' . $model->balance_after_from;
-                }
+                /** @var \common\models\User $user */
+                $user = Yii::$app->user->identity;
+                return $model->isIncome($user) ? $model->balance_after_to : $model->balance_after_from;
             },
         ],
     ],
