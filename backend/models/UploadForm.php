@@ -26,6 +26,7 @@ class UploadForm extends Model
      */
     public function upload()
     {
+//        __DIR__
         $path = realpath(dirname(__FILE__)) . '/../web/uploads/';
         $this->fullPath = $path . time() . '_' . $this->xlsFile->baseName . '.' . $this->xlsFile->extension;
         if ($this->validate()) {

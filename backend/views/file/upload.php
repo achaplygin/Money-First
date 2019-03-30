@@ -31,11 +31,7 @@ echo '<div class="col-lg-6">';
             ->andWhere([
                 'amount' => $item['amount'],
                 'user_id' => $item['user_id'],
-                'is_incoming' => $item['is_incoming'],
                 'created_at' => $item['created_at'],
-                $item['is_incoming'] ? 'account_to' : 'account_from' => $item['account'],
-                $item['is_incoming'] ? "account_from" : "account_to" =>
-                    User::findOne($item['user_id']) ? User::findOne($item['user_id'])->account : null,
             ])->exists()) {
             echo $i . " exists<br>";
         } else {
@@ -58,11 +54,7 @@ echo '<div class="col-lg-6">';
             ->andWhere([
                 'amount' => $item['amount'],
                 'user_id' => $item['user_id'],
-                'is_incoming' => $item['is_incoming'],
                 'created_at' => $item['created_at'],
-                $item['is_incoming'] ? 'account_to' : 'account_from' => $item['account'],
-                $item['is_incoming'] ? "account_from" : "account_to" =>
-                    User::findOne($item['user_id']) ? User::findOne($item['user_id'])->account : null,
             ])->asArray()->all());
 
     echo '</div><div class="col-lg-6">';

@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
-use common\models\Account;
-use frontend\widgets\UserAccount;
 use common\widgets\Alert;
+use common\models\Account;
+use yii\bootstrap\ActiveForm;
+use frontend\widgets\UserAccount;
 
 
 $this->title = 'Transaction create';
@@ -16,9 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-lg-6">
 
                 <?= Alert::widget([
-                        'alertTypes' => [
-                            'createUserTransaction' => 'alert-info'
-                        ],
+                    'alertTypes' => [
+                        'createUserTransaction' => 'alert-info'
+                    ],
                 ]) ?>
                 <?php $form = ActiveForm::begin(['id' => 'transaction-create-form']); ?>
 
@@ -33,7 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'method' => 'post',
                         ],]) ?>
                 </div>
-
                 <?php ActiveForm::end(); ?>
             </div>
         </div>

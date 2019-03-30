@@ -14,7 +14,6 @@ use Yii;
  * @property User $user
  * @property Transaction[] $transactionsFromAccount
  * @property Transaction[] $transactionsToAccount
- * @property string $username
  */
 class Account extends \yii\db\ActiveRecord
 {
@@ -77,12 +76,14 @@ class Account extends \yii\db\ActiveRecord
     }
 
     /**
+     * todo No comments
+     * @param int|null $accId
      * @return array
      */
     public function getSystemAccountList(int $accId = null)
     {
         return Account::find()
-            ->select(["CONCAT(username,'_',account.id) as account_label", 'account.id as account_id'])
+            ->select(["CONCAT('Account: ', account.id, ' of ', username) as account_label", 'account.id as account_id'])
             ->joinWith('user',false, 'JOIN')
             ->andWhere(['is_admin' => true])
             ->andFilterWhere(['account_id' => $accId])
@@ -91,27 +92,40 @@ class Account extends \yii\db\ActiveRecord
             ->asArray(true)->column();
     }
 
+    /**
+     * todo No comments
+     * @param int|null $accId
+     * @return array
+     */
+    public function getAccountList(int $accId = null)
+    {
+        return Account::find()
+            ->select(["CONCAT('Account: ', account.id, ' of ', username) as account_label", 'account.id as account_id'])
+            ->joinWith('user',false, 'JOIN')
+            ->andFilterWhere(['account_id' => $accId])
+            ->orderBy('account_id')
+            ->indexBy('account_id')
+            ->asArray(true)->column();
+    }
+
 //    /**
-//     * @param int|null $user_id
+//     * todo No comments
 //     * @return string
 //     */
-//    public function getUsername(int $user_id = null) : string
+//    public function getUsername() : ?string
 //    {
-//        $user_id = $user_id ?? $this->user->id ?? 'fuck';
-//        return User::findOne($user_id)->username;
+//        if ($this->user_id !== null) {
+//            return $this->user->username;
+//        }
+//        return null;
 //    }
-
-
-    public function getUsername() : string
-    {
-        return $this->user->username;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail() : string
-    {
-        return $this->user->email;
-    }
+//
+//    /**
+//     * todo No comments
+//     * @return string
+//     */
+//    public function getEmail() : string
+//    {
+//        return $this->user->email;
+//    }
 }

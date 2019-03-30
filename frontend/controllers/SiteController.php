@@ -229,7 +229,7 @@ class SiteController extends Controller
             $currentUser->generateAuthToken();
             return $this->redirect('http://admin.test/site/auth?hash=' . $currentUser->auth_token);
         } else {
-            throw new ForbiddenHttpException('<img src="http://i.imgur.com/zzVy0sO.png">');
+            throw new ForbiddenHttpException('Доступ только для администраторов');
         }
     }
 

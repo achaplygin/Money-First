@@ -9,7 +9,7 @@ use backend\models\UploadForm;
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Admin: MoneyFirst';
 
 //$searchModel = AccountSearch::find()->orderBy('user_id');
 //$dataProvider = new ActiveDataProvider([
@@ -42,11 +42,13 @@ $dataProvider->sort = [
 
 ?>
 <div>
-    <div class="col-lg-5">
+    <div class="col-lg-8">
         <?php echo $this->render('../account/_search', ['model' => $searchModel]); ?>
     </div>
-    <div class="col-lg-5">
-        <?php echo Html::a('file/import', ['file/upload'], ['class' => 'btn btn-primary']); ?>
+    <div class="col-lg-4" align="right">
+        <?php echo Html::a('Import Transactions', ['file/upload'], ['class' => 'btn btn-primary']); ?>
+        &nbsp;&nbsp;
+        <?php echo Html::a('Create Transaction', ['transaction/create'], ['class' => 'btn btn-success']); ?>
     </div>
 </div>
 <div class="site-index">
@@ -55,8 +57,8 @@ $dataProvider->sort = [
         'layout' => "{items}\n{pager}",
         'columns' => [
             'user_id',
-            'username',
-            'email',
+            'user.username',
+            'user.email',
             'id:integer:Account Id',
             'balance',
         ],

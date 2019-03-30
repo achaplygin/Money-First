@@ -19,7 +19,6 @@ class TransactionSearch extends Transaction
         return [
             [['id', 'user_id', 'account_to', 'account_from'], 'integer'],
             [['amount', 'balance_after_from', 'balance_after_to'], 'number'],
-            [['is_incoming'], 'boolean'],
             [['created_at'], 'safe'],
         ];
     }
@@ -42,7 +41,7 @@ class TransactionSearch extends Transaction
      */
     public function search($params)
     {
-        $query = Transaction::find();
+        $query = Transaction::find()->orderBy('created_at DESC');
 
         // add conditions that should always apply here
 
@@ -60,14 +59,10 @@ class TransactionSearch extends Transaction
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'amount' => $this->amount,
-            'is_incoming' => $this->is_incoming,
             'user_id' => $this->user_id,
             'account_to' => $this->account_to,
             'account_from' => $this->account_from,
-            'balance_after_from' => $this->balance_after_from,
-            'balance_after_to' => $this->balance_after_to,
             'created_at' => $this->created_at,
         ]);
 

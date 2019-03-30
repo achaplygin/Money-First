@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+use common\widgets\Alert;
+use common\models\Account;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -9,24 +11,18 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="transaction-form">
-
+    <?= Alert::widget([
+        'alertTypes' => [
+            'createUserTransaction' => 'alert-info'
+        ],
+    ]) ?>
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'amount')->textInput() ?>
 
-    <?= $form->field($model, 'is_incoming')->checkbox() ?>
-
-    <?= $form->field($model, 'user_id')->textInput() ?>
+    <?= $form->field($model, 'account_from')->dropDownList(Account::getSystemAccountList()) ?>
 
     <?= $form->field($model, 'account_to')->textInput() ?>
-
-    <?= $form->field($model, 'account_from')->textInput() ?>
-
-    <?= $form->field($model, 'balance_after_from')->textInput() ?>
-
-    <?= $form->field($model, 'balance_after_to')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

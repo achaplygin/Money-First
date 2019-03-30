@@ -12,6 +12,7 @@ use common\models\Account;
  */
 class AccountSearch extends Account
 {
+    public $username;
 
     /**
      * {@inheritdoc}
@@ -21,6 +22,7 @@ class AccountSearch extends Account
         return [
             [['id', 'user_id'], 'integer'],
             [['balance'], 'number'],
+            [['username'], 'string'],
         ];
     }
 
@@ -42,7 +44,7 @@ class AccountSearch extends Account
      */
     public function search($params)
     {
-        $query = Account::find()->joinWith('user')->orderBy('user_id');
+        $query = self::find()->joinWith('user')->orderBy('user_id');
 
         // add conditions that should always apply here
 
@@ -64,6 +66,11 @@ class AccountSearch extends Account
             'balance' => $this->balance,
             'user_id' => $this->user_id,
 //            'username' => $this->username,
+        ])
+        ->andFilterWhere([
+            'ilike',
+            'username',
+            $this->username,
         ]);
 
         return $dataProvider;

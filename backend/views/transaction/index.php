@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\Account;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\TransactionSearch */
@@ -15,27 +16,32 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Transaction', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions' => function (\common\models\Transaction $model) {
+            return [
+                'style' => Account::findOne($model->account_to)->user->is_admin ? 'background: #dfd;' : 'background: #fdd;',
+            ];
+        },
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
+            'created_at',
+            'user_id:text:Creator',
             'amount',
-            'is_incoming:boolean',
-            'user_id',
-            'account_to',
-            'account_from',
-            //'balance_after_from',
-            //'balance_after_to',
-            //'created_at',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'label' => 'User From',
+                'content' => function ($model) {
+                    return Account::findOne($model->account_from)->username . ' account:' . $model->account_from;
+                }
+            ],
+            [
+                'label' => 'User To',
+                'content' => function ($model) {
+                    return $model->account_to . Account::findOne($model->account_to)->username . ' - Account: ' . $model->account_to;
+                }
+            ],
         ],
+        'layout' => "{items}\n{pager}",
     ]); ?>
 </div>

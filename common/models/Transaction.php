@@ -10,7 +10,6 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property int $id
  * @property string $amount
- * @property bool $is_incoming
  * @property int $user_id
  * @property int $account_from
  * @property int $account_to
@@ -40,7 +39,6 @@ class Transaction extends \yii\db\ActiveRecord
         return [
             [['amount', 'balance_after_from', 'balance_after_to'], 'number'],
             [['amount'], 'compare', 'compareValue' => 0, 'operator' => '>'],
-            [['is_incoming'], 'boolean'],
             [['amount', 'user_id', 'account_from', 'account_to', 'balance_after_from', 'balance_after_to'], 'required'],
             [['user_id', 'account_from', 'account_to'], 'default', 'value' => null],
             [['user_id', 'account_from', 'account_to'], 'integer'],
@@ -48,7 +46,6 @@ class Transaction extends \yii\db\ActiveRecord
             [['account_from'], 'exist', 'skipOnError' => true, 'targetClass' => Account::class, 'targetAttribute' => ['account_from' => 'id']],
             [['account_to'], 'exist', 'skipOnError' => true, 'targetClass' => Account::class, 'targetAttribute' => ['account_to' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
-
             ['amount', function ($attribute) {
                 if ($this->accountFrom->balance < $this->$attribute) {
                     $this->addError($attribute, 'Not enough money.');
@@ -63,13 +60,14 @@ class Transaction extends \yii\db\ActiveRecord
 //
 //        // todo: разобраться со сраными поведениями!!!11!1адын!!!11
 //        $behaviors[] = [
-//            'class' => TimestampBehavior::class,
-//            'value' => function () {
-//                return date('Y-m-d H:i:s', time());
-//            },
+//            [
+//                'class' => TimestampBehavior::class,
+//                'attributes' => [
+//                    $this::EVENT_BEFORE_INSERT => ['created_at'],
+//                    $this::EVENT_BEFORE_UPDATE => ['created_at'],
+//                ],
+//            ],
 //        ];
-//
-//        return $behaviors;
 //    }
 
     /**
@@ -80,7 +78,6 @@ class Transaction extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'amount' => 'Amount',
-            'is_incoming' => 'Is Incoming',
             'user_id' => 'User ID',
             'account_from' => 'Account From',
             'account_to' => 'Account To',

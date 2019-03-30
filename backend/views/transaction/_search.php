@@ -19,8 +19,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'amount') ?>
 
-    <?= $form->field($model, 'is_incoming')->checkbox() ?>
-
     <?= $form->field($model, 'user_id') ?>
 
     <?= $form->field($model, 'account_to') ?>

@@ -8,6 +8,7 @@ use backend\models\TransactionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\CreateTransaction;
 
 /**
  * TransactionController implements the CRUD actions for Transaction model.
@@ -37,6 +38,8 @@ class TransactionController extends Controller
     {
         $searchModel = new TransactionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->pagination=['pagesize'=>15];
+        $dataProvider->sort=false;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -59,20 +62,28 @@ class TransactionController extends Controller
 
     /**
      * Creates a new Transaction model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * If creation is successful, the browser will be redirected to the previous page.
+     * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Transaction();
+        /** @var \common\models\User $usr */
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model = new CreateTransaction();
+        $model->user_id = Yii::$app->user->id;
+
+        if ($model->load(Yii::$app->request->post())) {
+            try {
+                $model->createTransaction();
+                Yii::$app->session->setFlash('createUserTransaction', 'ok');
+                return $this->goBack();
+            } catch (\Exception $e) {
+                Yii::$app->session->setFlash('createUserTransaction', $e->getMessage());
+            }
+        } else {
+            Yii::$app->session->setFlash('createUserTransaction', 'Please fill out the following form');
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->render('create', ['model' => $model]);
     }
 
     /**
@@ -96,11 +107,11 @@ class TransactionController extends Controller
     }
 
     /**
-     * Deletes an existing Transaction model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
@@ -124,4 +135,5 @@ class TransactionController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

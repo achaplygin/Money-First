@@ -10,13 +10,22 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
-        $user=User::find()->orderBy('id')->all();
+//        $user=User::find()->orderBy('id')->all();
+//        echo PHP_EOL;
+//        echo 'Use "add-money($user_id)" to increase user.balance+=5000';
+//        echo "\nusr_id\tusername\tbalance";
+//        foreach ($user as $usr){
+//            echo "\n".$usr->id."\t".$usr->username."\t\t".$usr->account->balance;
+//        }
+//        echo PHP_EOL;
         echo PHP_EOL;
-        echo 'Use "add-money($user_id)" to increase user.balance+=5000';
-        echo "\nusr_id\tusername\tbalance";
-        foreach ($user as $usr){
-            echo "\n".$usr->id."\t".$usr->username."\t\t".$usr->account->balance;
+        echo PHP_EOL;
+
+        foreach (range(0, 3) as $i) {
+            var_dump((bool)($q = $i));
         }
+
+        echo PHP_EOL;
         echo PHP_EOL;
         echo PHP_EOL;
 
