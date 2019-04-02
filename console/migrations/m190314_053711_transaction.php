@@ -15,12 +15,11 @@ class m190314_053711_transaction extends Migration
         $this->createTable('{{%transaction}}', [
             'id' => $this->primaryKey(),
             'amount' => $this->decimal()->notNull()->defaultValue(0)->check('amount >= 0'),
-            'is_incoming' => $this->boolean()->notNull()->defaultValue(true),
             'user_id' => $this->integer()->notNull(),
             'account_from' => $this->integer()->notNull(),
             'account_to' => $this->integer()->notNull(),
-            'balance_after_from' => $this->decimal()->notNull()->check('amount >= 0'),
-            'balance_after_to' => $this->decimal()->notNull()->check('amount >= 0'),
+            'balance_after_from' => $this->decimal()->notNull(),
+            'balance_after_to' => $this->decimal()->notNull(),
             'created_at' => $this->dateTime()->notNull()->defaultExpression('now()'),
         ]);
 

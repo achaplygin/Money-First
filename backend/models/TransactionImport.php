@@ -1,63 +1,56 @@
 <?php
-/**
- *  todo больше комментариев!!!
- */
 
 namespace backend\models;
 
-use common\models\Account;
-use common\models\CreateTransaction;
 use Yii;
-use common\models\User;
-use common\models\Transaction;
-use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use yii\base\Model;
+use common\models\User;
+use common\models\Account;
+use common\models\Transaction;
+use common\models\CreateTransaction;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
 
 /**
+ * Class TransactionImport
+ *
  * This is the model class for import "transactions" from file.
+ * In this class realised:
+ *  -Read data from xls file
+ *  -Mapping array by required indexes
+ *  -Validation of the received information
+ *  -Creating relevant users and accounts if required.
+ *  -Calling a method to create a transaction.
  *
- * @property string $amount
- * @property int $user_id
- * @property int $account
- * @property string $created_at
- *
+ * @package backend\models
  */
 class TransactionImport extends Model
 {
 
     public $amount;
-    public $user_id;
     public $created_at;
     public $account;
+    public $is_income;
     public $account_to;
     public $account_from;
 
     /**
+     * Rules for validate parsed data from file
      * @return array
      */
     public function rules()
     {
         return [
-            [
-                [
-                    'amount',
-                    'user_id',
-                    'account_from',
-                    'account_to',
-                    'created_at',
-                ],
-                'required',
-            ],
+            [['amount', 'account_from', 'account_to', 'created_at', 'is_income',], 'required',],
             [['amount'], 'number'],
             [['created_at'], 'safe'],
-            [['user_id', 'account_from', 'account_to'], 'integer'],
+            [['is_income'], 'boolean'],
+            [['account_from', 'account_to'], 'integer'],
             [['amount'], 'compare', 'compareValue' => 0, 'operator' => '>'],
-            [['amount', 'user_id', 'account', 'created_at'],
+            [['amount', 'account', 'created_at'],
                 function ($attribute) {
                     if (Transaction::find()
                         ->andWhere([
                             'amount' => $this->amount,
-                            'user_id' => $this->user_id,
                             'created_at' => $this->created_at,
                             'account_to' => $this->account_to,
                             'account_from' => $this->account_from,
@@ -69,8 +62,9 @@ class TransactionImport extends Model
     }
 
     /**
-     * @param string $fullpath Full path to file with filename.
-     * @return array Data from file mapped by indexes from first line.
+     * @param string $fullpath - Full path to uploaded file.
+     * @return array - The array of the required data mapped by first line indexes.
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
@@ -82,39 +76,26 @@ class TransactionImport extends Model
         $data = $spreadsheet->getActiveSheet()->toArray();
         $res = [];
 
-        $h = array_shift($data);
+        $keys = array_shift($data);
 
         foreach ($data as $n => $item) {
             foreach ($item as $i => $value) {
-                switch ($h[$i]) {
-                    case 'user_id':
-                        $res[$n]['user_id'] = (int)$value ?: null;
-
-                        break;
+                switch ($keys[$i]) {
                     case 'account_to':
-                        if (!(int)$value == 0) {
-                            $res[$n]['account_to'] = (int)$value;
-                        } else {
-                            $res[$n]['account_to'] = null;
-                        }
+                        $res[$n]['account_to'] = (int)$value ?: null;
                         break;
                     case 'account_from':
-                        if (!(int)$value == 0) {
-                            $res[$n]['account_from'] = (int)$value;
-                        } else {
-                            $res[$n]['account_from'] = null;
-                        }
+                        $res[$n]['account_from'] = (int)$value ?: null;
                         break;
                     case 'amount':
-                        if (!$value == null) {
-                            $res[$n]['amount'] = (float)$value;
-                        } else {
-                            $res[$n]['amount'] = $value;
-                        }
+                        $res[$n]['amount'] = (float)$value ?: null;
                         break;
                     case 'created_at':
-                        $res[$n]['created_at'] = (string)$value;
+                        $res[$n]['created_at'] = (string)$value ?: null;
                         //date_format(date_create_from_format('Y-m-d H:i:s', $value), 'Y-m-d H:i:s');
+                        break;
+                    case 'is_income':
+                        $res[$n]['is_income'] = (bool)$value;
                         break;
 
                     default:
@@ -126,60 +107,147 @@ class TransactionImport extends Model
     }
 
     /**
-     * @param array $res
+     * This function validate each line from array and launch process of creating transaction.
+     *
+     * @param array $res - Mapped array of the required data.
+     * @throws \Exception
      */
     public static function import(array $res)
     {
-        $message = ''; //for debug
+        $message = 'Those lines from file was not passed validation: ';
         foreach ($res as $i => $item) {
             $model = new self();
             $model->attributes = $item;
-            if (!$model->validate()) {
-                $message = $message . '_fail:' . $i;    //for debug
-            } else {
+
+            if ($model->validate()) {
                 $model->saveTransaction();
+            } else {
+                $strNum = $i + 2;
+                $message = $message . $strNum . ', ';
+                Yii::$app->session->setFlash('warning', $message);
             }
         }
-
-        Yii::$app->session->setFlash('error', $message); //for debug
     }
 
+    /**
+     * Calling necessary functions to create user, account, transaction.
+     *
+     * @throws \Exception
+     */
     public function saveTransaction()
     {
-        // todo надо проверять права для from_to
-//        try {
-        $this->createUser($this->user_id);
-        $this->createAccounts($this->account_to); //cka
+
+        $this->createAccounts($this->account_from, $this->account_to, $this->is_income);
+
         $model = new CreateTransaction();
         $model->attributes = $this->toArray();
+        $model->user_id = Yii::$app->user->identity->id;
 
-        $model->createTransaction();
-//            if (!) {
-//                $err = $model->errors;
-//                throw new \Exception("Can't save Transaction: " . json_encode($err));
-//            }
-//        } catch (\Exception $e) {
-//
-//        }
+        try {
+            $model->createTransaction();
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', $e->getMessage());
+        }
+
     }
 
-
-    private function createUser(int $userId)
+    /**
+     * Matching of outgoing and target accounts with existing ones, or the creation of appropriate new ones.
+     *
+     * @param int $account_from
+     * @param int $account_to
+     * @param bool $isIncome
+     * @throws \yii\base\Exception
+     */
+    private function createAccounts(int $account_from, int $account_to, bool $isIncome)
     {
-        if (User::findOne($userId) === null) {
-            // todo new User()
-            new User();
+        $accFrom = Account::findOne($account_from);
+        $accTo = Account::findOne($account_to);
 
+        if ($isIncome) {
+            //для входящих операций
+
+            //пользовательский счёт:
+            // -если не существует
+            // --создаём пользователя
+            // --afterSave() создаёт ему счёт
+            // --подставляем созданному счёту id из файла
+            if ($accFrom === null) {
+                $user_from = $this->createUser();
+                $user_from->account->id = $account_from;
+                $user_from->account->save();
+            }
+
+            //целевой счёт:
+            // -если не существует - создаём счёт админу.
+            // -если существует - проверяем, что админский.
+            if ($accTo === null) {
+                $accTo = new Account([
+                    'id' => $account_to,
+                    'user_id' => User::findOne(['username' => 'admin'])->id,
+                    'balance' => 0,
+                ]);
+                $accTo->save();
+            } else {
+                if (!$accTo->user->is_admin) {
+                    throw new \Exception('Incoming operation cannot be credited to the user account.');
+                }
+            }
+
+        } else {
+            //для исходящих операций
+
+            // системный счёт
+            // -если не существует - создаём счёт админу.
+            // -если существует - проверяем, что админский.
+            if ($accFrom === null) {
+                $accFrom = new Account([
+                    'id' => $account_from,
+                    'user_id' => User::findOne(['username' => 'admin'])->id,
+                    'balance' => $this->amount,
+                ]);
+                $accFrom->save();
+            } else {
+                if (!$accFrom->user->is_admin) {
+                    throw new \Exception('Outgoing operation cannot be credited from the user account.');
+                }
+            }
+            //целевой пользовательский счёт
+            // -если не существует
+            // --создаём пользователя
+            // --afterSave() создаёт ему счёт
+            // --подставляем созданному счёту id из файла
+            if ($accTo === null) {
+                $user_to = $this->createUser();
+                $user_to->account->id = $account_to;
+                $user_to->account->save();
+            }
         }
     }
 
-
-    private function createAccounts(int $account)
+    /**
+     * Creating new user with generated name and default password.
+     *
+     * @return User
+     * @throws \yii\base\Exception
+     */
+    private function createUser(): User
     {
-        if (Account::findOne($account) === null) {
-            // todo new Account()
-            new Account();
-
+        $num = User::find()->count();
+        if (User::findOne(['username' => 'user' . $num])
+            || User::findOne(['email' => 'user' . $num . '@mail.com'])) {
+            $num = $num . '_' . Yii::$app->security->generateRandomString(3);
         }
+        $username = 'user' . $num;
+        $email = 'user' . $num . '@mail.com';
+        $password = '123456';
+
+        $user = new User();
+        $user->username = $username;
+        $user->email = $email;
+        $user->setPassword($password);
+        $user->generateAuthKey();
+
+        return $user->save() ? $user : null;
     }
 }

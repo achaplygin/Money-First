@@ -16,7 +16,7 @@ class m190304_112223_account extends Migration
         $this->createTable('{{%account}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
-            'balance' => $this->decimal()->notNull()->defaultValue(0)->check('balance >= 0')
+            'balance' => $this->decimal()->notNull()->defaultValue(0),
         ]);
 
         $this->addForeignKey(

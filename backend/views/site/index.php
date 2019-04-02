@@ -1,8 +1,6 @@
 <?php
 
-use yii\helpers\Html;
 use yii\grid\GridView;
-use common\models\Account;
 
 /* @var $this yii\web\View */
 /* @var $balances array */
@@ -26,7 +24,15 @@ $this->title = 'Admin: MoneyFirst';
                     'user.username:text:Username',
                     'user.email:email:Email',
                     'id:integer:Account Id',
-                    'balance:currency',
+                    [
+                        'attribute' => 'balance',
+                        'format' => 'currency',
+                        'contentOptions' => function ($model) {
+                            return [
+                                'style' => $model->balance >= 0 ? '' : 'color: red',
+                            ];
+                        },
+                    ],
                 ],
                 'rowOptions' => function ($model) {
                     return [
@@ -40,5 +46,4 @@ $this->title = 'Admin: MoneyFirst';
     <div class="col-lg-3">
         <?= \backend\widgets\AdminSidebar::widget(); ?>
     </div>
-
 </div>

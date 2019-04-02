@@ -2,6 +2,7 @@
 /**
  * @var $balance
  */
+
 use yii\helpers\Html;
 
 ?>
@@ -10,5 +11,13 @@ use yii\helpers\Html;
 </h2>
 <hr>
 <h2 align="right">
-    <?= Yii::$app->formatter->asCurrency($balance); ?>
+    <?php
+    if (Yii::$app->user->identity->is_admin)
+        foreach ($balance as $item) {
+            echo Yii::$app->formatter->asCurrency($item) . "<br>";
+        }
+    else {
+        echo Yii::$app->formatter->asCurrency($balance);
+    }
+    ?>
 </h2>

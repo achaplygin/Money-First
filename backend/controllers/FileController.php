@@ -8,12 +8,14 @@ use yii\web\Controller;
 use yii\web\UploadedFile;
 use backend\models\UploadForm;
 use backend\models\TransactionImport;
-use PhpOffice\PhpSpreadsheet\Reader\Xls;
+
 
 class FileController extends Controller
 {
 
     /**
+     * Get file and pass it for importing transactions.
+     *
      * @return string
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
@@ -28,23 +30,11 @@ class FileController extends Controller
                 // file is uploaded successfully
                 TransactionImport::import(TransactionImport::readFile($model->fullPath));
 
-//                Yii::$app->session->setFlash('success', 'ok');
+                Yii::$app->session->setFlash('success', 'File was parsed. Validated operations was saved.');
                 return $this->render('upload', ['model' => $model]);
             }
         }
         return $this->render('upload', ['model' => $model]);
-    }
-
-    /**
-     * @return string
-     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
-     */
-    public function actionRead()
-    {
-        $reader = new Xls();
-        $spreadsheet = $reader->load(realpath(dirname(__FILE__)) . '/../web/uploads/1553592401_transactions.xls');
-
-        return $this->render('read-file', ['spreadsheet' => $spreadsheet]);
     }
 
 }

@@ -2,8 +2,9 @@
 
 namespace frontend\widgets;
 
-use common\models\Account;
 use Yii;
+use common\models\User;
+use common\models\Account;
 
 /**
  * Class UserAccount
@@ -19,7 +20,18 @@ class UserAccount extends \yii\bootstrap\Widget
      */
     public function init()
     {
-        $this->balance = Account::findOne(['user_id' => Yii::$app->user->getId()])->balance;
+        /** @var User $user */
+        $user = Yii::$app->user->identity;
+        if (!$user->is_admin) {
+            $this->balance = Account::findOne(['user_id' => $user->getId()])->balance;
+        } else {
+            $this->balance = Account::find()
+                ->select('balance')
+                ->andWhere(['user_id' => $user->getId()])
+                ->orderBy('id')
+                ->asArray()
+                ->column();
+        }
     }
 
     /**

@@ -2,9 +2,6 @@
 
 namespace common\models;
 
-use Yii;
-use yii\behaviors\TimestampBehavior;
-
 /**
  * This is the model class for table "transaction".
  *
@@ -49,28 +46,12 @@ class Transaction extends \yii\db\ActiveRecord
             [['account_to'], 'exist', 'skipOnError' => true, 'targetClass' => Account::class, 'targetAttribute' => ['account_to' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
             ['amount', function ($attribute) {
-                if ($this->accountFrom->balance < $this->$attribute) {
+                if (!$this->user->is_admin && $this->accountFrom->balance < $this->$attribute) {
                     $this->addError($attribute, 'Not enough money.');
                 };
             }],
         ];
     }
-
-//    public function behaviors()
-//    {
-//        $behaviors = parent::behaviors();
-//
-//        // todo: разобраться со сраными поведениями!!!11!1адын!!!11
-//        $behaviors[] = [
-//            [
-//                'class' => TimestampBehavior::class,
-//                'attributes' => [
-//                    $this::EVENT_BEFORE_INSERT => ['created_at'],
-//                    $this::EVENT_BEFORE_UPDATE => ['created_at'],
-//                ],
-//            ],
-//        ];
-//    }
 
     /**
      * {@inheritdoc}
@@ -97,11 +78,6 @@ class Transaction extends \yii\db\ActiveRecord
         return $this->hasOne(Account::class, ['id' => 'account_from']);
     }
 
-//    public function getUserFrom()
-//    {
-//        return $this->hasOne(User::class, ['id' => 'user_id']);
-//    }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -119,6 +95,8 @@ class Transaction extends \yii\db\ActiveRecord
     }
 
     /**
+     * Is transaction incoming for this user
+     *
      * @param User $user
      * @return bool
      */

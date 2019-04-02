@@ -15,11 +15,10 @@ class AdminSidebar extends \yii\bootstrap\Widget
     {
         $this->balances = Account::find()
             ->select('balance, username')
-            ->joinWith('user', false)
+            ->joinWith('user', false, 'JOIN')
             ->andWhere('is_admin')
-            ->orderBy('user.id')
-            ->indexBy('username')
-            ->column();
+            ->orderBy('account.id')
+            ->asArray()->all();
     }
 
 

@@ -17,11 +17,11 @@ use yii\helpers\Html;
         <h2>Balances</h2>
         <hr>
         <?php
-        foreach ($balances as $name => $value) {
+        foreach ($balances as $value) {
             echo "<h4 class=\"col-lg-4\">"
-                . $name
+                . $value['username']
                 . "</h4><h4 class=\"col-lg-8\" align='right'>"
-                . Yii::$app->formatter->asCurrency($value)
+                . Yii::$app->formatter->asCurrency($value['balance'])
                 . "<br></h4>";
         }
         ?>
