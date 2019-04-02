@@ -2,7 +2,6 @@
 
 namespace backend\models;
 
-use common\models\User;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Account;
@@ -13,6 +12,9 @@ use common\models\Account;
 class AccountSearch extends Account
 {
     public $username;
+    public $email;
+    public $minBalance;
+    public $maxBalance;
 
     /**
      * {@inheritdoc}
@@ -23,6 +25,8 @@ class AccountSearch extends Account
             [['id', 'user_id'], 'integer'],
             [['balance'], 'number'],
             [['username'], 'string'],
+            [['email'], 'string'],
+            [['minBalance', 'maxBalance'], 'number'],
         ];
     }
 
@@ -62,18 +66,29 @@ class AccountSearch extends Account
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'account.id' => $this->id,
             'balance' => $this->balance,
             'user_id' => $this->user_id,
-//            'username' => $this->username,
         ])
-        ->andFilterWhere([
-            'ilike',
-            'username',
-            $this->username,
-        ]);
+            ->andFilterWhere([
+                '>', 'balance', $this->minBalance,
+            ])
+            ->andFilterWhere([
+                '<', 'balance', $this->maxBalance,
+            ])
+            ->andFilterWhere([
+                'ilike', 'username', $this->username,
+            ])
+            ->andFilterWhere([
+                'ilike', 'email', $this->email,
+            ]);
 
         return $dataProvider;
+    }
+
+    public function reset()
+    {
+
     }
 
 }

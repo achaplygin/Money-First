@@ -15,25 +15,34 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'amount') ?>
-
-    <?= $form->field($model, 'user_id') ?>
-
-    <?= $form->field($model, 'account_to') ?>
-
-    <?= $form->field($model, 'account_from') ?>
-
-    <?php // echo $form->field($model, 'balance_after_from') ?>
-
-    <?php // echo $form->field($model, 'balance_after_to') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
+    <div class="col-lg-3">
+        <?= $form->field($model, 'minAmount') ?>
+    </div>
+    <div class="col-lg-3">
+        <?= $form->field($model, 'maxAmount') ?>
+    </div>
+    <div class="col-lg-3">
+        <?= $form->field($model, 'user_id') ?>
+    </div>
+    <div class="col-lg-3">
+        <?= $form->field($model, 'creator') ?>
+    </div>
+    <div class="col-lg-3">
+        <?= $form->field($model, 'userFrom') ?>
+    </div>
+    <div class="col-lg-3">
+        <?= $form->field($model, 'userTo') ?>
+    </div>
+    <div class="col-lg-3">
+        <?= $form->field($model, 'minDate')->input('date') ?>
+    </div>
+    <div class="col-lg-3">
+        <?= $form->field($model, 'maxDate')->input('date') ?>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Reset', '/transaction',['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

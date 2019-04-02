@@ -15,19 +15,34 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'user_id') ?>
-
-    <?= $form->field($model, 'balance') ?>
-
-    <?= $form->field($model, 'username') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+    <div class="col-lg-6" style="padding-left: 0px;">
+        <?= $form->field($model, 'id') ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <div class="col-lg-6" style="padding-left: 0px;">
+        <?= $form->field($model, 'user_id') ?>
+
+    </div>
+
+    <div class="col-lg-6" style="padding-left: 0px;">
+        <?= $form->field($model, 'username') ?>
+    </div>
+    <div class="col-lg-6" style="padding-left: 0px;">
+        <?= $form->field($model, 'email') ?>
+    </div>
+<div class="col-lg-12" style="padding: 0px;">
+    <div class="col-lg-3" style="padding-left: 0px;">
+        <?= $form->field($model, 'minBalance') ?>
+    </div>
+
+    <div class="col-lg-3" style="padding-left: 0px;">
+        <?= $form->field($model, 'maxBalance') ?>
+    </div>
+    <div class="col-lg-6" style="padding-left: 0px; height: 74px;">
+        <label>&nbsp;</label>
+        <?= Html::submitButton('Search', ['class' => 'btn btn-primary col-lg-12']) ?>
+    </div>
+</div>
+    <?php ActiveForm::end(); /*class="form-group"*/?>
 
 </div>

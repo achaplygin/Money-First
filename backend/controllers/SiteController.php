@@ -2,13 +2,14 @@
 
 namespace backend\controllers;
 
-use function foo\func;
 use Yii;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use common\models\LoginForm;
 use common\models\User;
+use common\models\Account;
+use yii\filters\VerbFilter;
+use common\models\LoginForm;
+use yii\filters\AccessControl;
+use backend\models\AccountSearch;
 
 /**
  * Site controller
@@ -67,7 +68,19 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $searchModel = new AccountSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->pagination = ['pageSize' => 15];
+        $dataProvider->sort = [
+            'attributes' => [
+                'id',
+                'user_id',
+                'balance',
+                'user.username',
+                'user.email',
+            ]];
+
+        return $this->render('index', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider]);
     }
 
     /**
@@ -132,4 +145,5 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+
 }

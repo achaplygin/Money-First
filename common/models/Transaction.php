@@ -19,6 +19,8 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property Account $accountFrom
  * @property Account $accountTo
+ * @property User $userFrom
+ * @property User $userTo
  * @property User $user
  */
 class Transaction extends \yii\db\ActiveRecord
@@ -37,9 +39,9 @@ class Transaction extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['amount', 'user_id', 'account_from', 'account_to', 'balance_after_from', 'balance_after_to'], 'required'],
             [['amount', 'balance_after_from', 'balance_after_to'], 'number'],
             [['amount'], 'compare', 'compareValue' => 0, 'operator' => '>'],
-            [['amount', 'user_id', 'account_from', 'account_to', 'balance_after_from', 'balance_after_to'], 'required'],
             [['user_id', 'account_from', 'account_to'], 'default', 'value' => null],
             [['user_id', 'account_from', 'account_to'], 'integer'],
             [['created_at'], 'safe'],
@@ -92,15 +94,20 @@ class Transaction extends \yii\db\ActiveRecord
      */
     public function getAccountFrom()
     {
-        return $this->hasOne(Account::className(), ['id' => 'account_from']);
+        return $this->hasOne(Account::class, ['id' => 'account_from']);
     }
+
+//    public function getUserFrom()
+//    {
+//        return $this->hasOne(User::class, ['id' => 'user_id']);
+//    }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getAccountTo()
     {
-        return $this->hasOne(Account::className(), ['id' => 'account_to']);
+        return $this->hasOne(Account::class, ['id' => 'account_to']);
     }
 
     /**

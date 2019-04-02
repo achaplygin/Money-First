@@ -27,8 +27,6 @@ use yii\helpers\ArrayHelper;
  *
  * @property Account $account
  */
-
-
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
@@ -39,10 +37,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function afterSave($insert, $changedAttributes)
     {
         if ($insert) {
-            $account = new Account();
-            $account->user_id = $this->id;
-            $account->balance = 500;
-            $account->save();
+            if (!Account::findOne(['user_id' => $this->id])) {
+                $account = new Account();
+                $account->user_id = $this->id;
+                $account->save();
+            }
         }
         parent::afterSave($insert, $changedAttributes);
     }

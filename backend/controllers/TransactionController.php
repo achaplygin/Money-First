@@ -22,7 +22,7 @@ class TransactionController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -38,8 +38,8 @@ class TransactionController extends Controller
     {
         $searchModel = new TransactionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->pagination=['pagesize'=>15];
-        $dataProvider->sort=false;
+        $dataProvider->pagination = ['pagesize' => 10];
+        $dataProvider->sort = false;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -67,7 +67,6 @@ class TransactionController extends Controller
      */
     public function actionCreate()
     {
-        /** @var \common\models\User $usr */
 
         $model = new CreateTransaction();
         $model->user_id = Yii::$app->user->id;

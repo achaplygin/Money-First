@@ -1,66 +1,44 @@
 <?php
 
-use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
-use backend\models\AccountSearch;
 use yii\helpers\Html;
-use backend\models\UploadForm;
-
+use yii\grid\GridView;
+use common\models\Account;
 
 /* @var $this yii\web\View */
+/* @var $balances array */
+/* @var $searchModel \backend\models\AccountSearch */
+/* @var $dataProvider \yii\data\ActiveDataProvider */
 
 $this->title = 'Admin: MoneyFirst';
 
-//$searchModel = AccountSearch::find()->orderBy('user_id');
-//$dataProvider = new ActiveDataProvider([
-//    'query' => $searchModel,
-//    'pagination' => [
-//        'pageSize' => 15,
-//    ],
-//    'sort' => [
-//        'attributes' => [
-//            'id',
-//            'user_id',
-//            'balance',
-//            'username',
-//            'email',
-//        ]
-//    ]
-//]);
-
-$searchModel = new AccountSearch();
-$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-$dataProvider->pagination = ['pageSize' => 15];
-$dataProvider->sort = [
-    'attributes' => [
-        'id',
-        'user_id',
-        'balance',
-        'username',
-        'email',
-    ]];
-
 ?>
-<div>
-    <div class="col-lg-8">
-        <?php echo $this->render('../account/_search', ['model' => $searchModel]); ?>
+<div class="col-lg-12">
+    <div class="col-lg-9" style="padding-left: 0">
+        <div>
+            <?php echo $this->render('../account/_search', ['model' => $searchModel]); ?>
+        </div>
+        <div class="col-lg-12" style="padding-left: 0"><br>
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'layout' => "{items}\n{pager}",
+                'columns' => [
+                    'user_id',
+                    'user.username:text:Username',
+                    'user.email:email:Email',
+                    'id:integer:Account Id',
+                    'balance:currency',
+                ],
+                'rowOptions' => function ($model) {
+                    return [
+                        'style' => $model->user->is_admin ? 'font-weight: bold;' : '',
+                    ];
+                },
+            ]) ?>
+        </div>
     </div>
-    <div class="col-lg-4" align="right">
-        <?php echo Html::a('Import Transactions', ['file/upload'], ['class' => 'btn btn-primary']); ?>
-        &nbsp;&nbsp;
-        <?php echo Html::a('Create Transaction', ['transaction/create'], ['class' => 'btn btn-success']); ?>
+
+    <div class="col-lg-3">
+        <?= \backend\widgets\AdminSidebar::widget(); ?>
     </div>
-</div>
-<div class="site-index">
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'layout' => "{items}\n{pager}",
-        'columns' => [
-            'user_id',
-            'user.username',
-            'user.email',
-            'id:integer:Account Id',
-            'balance',
-        ],
-    ]) ?>
+
 </div>

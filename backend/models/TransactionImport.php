@@ -5,6 +5,8 @@
 
 namespace backend\models;
 
+use common\models\Account;
+use common\models\CreateTransaction;
 use Yii;
 use common\models\User;
 use common\models\Transaction;
@@ -36,10 +38,19 @@ class TransactionImport extends Model
     public function rules()
     {
         return [
-            [['amount', 'user_id', 'account', 'created_at'], 'required'],
+            [
+                [
+                    'amount',
+                    'user_id',
+                    'account_from',
+                    'account_to',
+                    'created_at',
+                ],
+                'required',
+            ],
             [['amount'], 'number'],
             [['created_at'], 'safe'],
-            [['user_id', 'account'], 'integer'],
+            [['user_id', 'account_from', 'account_to'], 'integer'],
             [['amount'], 'compare', 'compareValue' => 0, 'operator' => '>'],
             [['amount', 'user_id', 'account', 'created_at'],
                 function ($attribute) {
@@ -77,24 +88,29 @@ class TransactionImport extends Model
             foreach ($item as $i => $value) {
                 switch ($h[$i]) {
                     case 'user_id':
-                        if (!(int)$value == 0) {
-                            $res[$n]['user_id'] = (int)$value;
-                        } else $res[$n]['user_id'] = null;
+                        $res[$n]['user_id'] = (int)$value ?: null;
+
                         break;
                     case 'account_to':
                         if (!(int)$value == 0) {
                             $res[$n]['account_to'] = (int)$value;
-                        } else $res[$n]['account_to'] = null;
+                        } else {
+                            $res[$n]['account_to'] = null;
+                        }
                         break;
                     case 'account_from':
                         if (!(int)$value == 0) {
                             $res[$n]['account_from'] = (int)$value;
-                        } else $res[$n]['account_from'] = null;
+                        } else {
+                            $res[$n]['account_from'] = null;
+                        }
                         break;
                     case 'amount':
                         if (!$value == null) {
                             $res[$n]['amount'] = (float)$value;
-                        } else $res[$n]['amount'] = $value;
+                        } else {
+                            $res[$n]['amount'] = $value;
+                        }
                         break;
                     case 'created_at':
                         $res[$n]['created_at'] = (string)$value;
@@ -111,35 +127,59 @@ class TransactionImport extends Model
 
     /**
      * @param array $res
-     * @throws \Exception
      */
     public static function import(array $res)
     {
         $message = ''; //for debug
         foreach ($res as $i => $item) {
-            $model = new TransactionImport();
+            $model = new self();
             $model->attributes = $item;
-            if (!$model->validate()) {                  //just
+            if (!$model->validate()) {
                 $message = $message . '_fail:' . $i;    //for debug
-            }
-            if ($model->validate()) {
+            } else {
                 $model->saveTransaction();
             }
         }
-        Yii::$app->session->setFlash('error', $message); //for debug
 
+        Yii::$app->session->setFlash('error', $message); //for debug
     }
 
     public function saveTransaction()
     {
         // todo надо проверять права для from_to
-        try {
-            $model = new Transaction();
-            $model->attributes = $this;
-            if (!$model->save()) throw new \Exception("Can't save Transaction");
-        } catch (\Exception $e) {
+//        try {
+        $this->createUser($this->user_id);
+        $this->createAccounts($this->account_to); //cka
+        $model = new CreateTransaction();
+        $model->attributes = $this->toArray();
+
+        $model->createTransaction();
+//            if (!) {
+//                $err = $model->errors;
+//                throw new \Exception("Can't save Transaction: " . json_encode($err));
+//            }
+//        } catch (\Exception $e) {
+//
+//        }
+    }
+
+
+    private function createUser(int $userId)
+    {
+        if (User::findOne($userId) === null) {
+            // todo new User()
+            new User();
 
         }
     }
 
+
+    private function createAccounts(int $account)
+    {
+        if (Account::findOne($account) === null) {
+            // todo new Account()
+            new Account();
+
+        }
+    }
 }

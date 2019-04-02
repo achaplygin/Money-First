@@ -17,6 +17,7 @@ use Yii;
  */
 class Account extends \yii\db\ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
@@ -45,7 +46,7 @@ class Account extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'Account ID',
             'user_id' => 'User ID',
             'balance' => 'Balance',
         ];
@@ -108,24 +109,4 @@ class Account extends \yii\db\ActiveRecord
             ->asArray(true)->column();
     }
 
-//    /**
-//     * todo No comments
-//     * @return string
-//     */
-//    public function getUsername() : ?string
-//    {
-//        if ($this->user_id !== null) {
-//            return $this->user->username;
-//        }
-//        return null;
-//    }
-//
-//    /**
-//     * todo No comments
-//     * @return string
-//     */
-//    public function getEmail() : string
-//    {
-//        return $this->user->email;
-//    }
 }

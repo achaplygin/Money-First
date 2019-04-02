@@ -20,7 +20,6 @@ class CreateTransaction extends Transaction
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
-            /** @var User $usr */
 
             if ((int)$this->account_to === (int)$this->account_from) {
                 throw new \Exception('Operation aborted: Incoming and outgoing accounts are the same.');
@@ -28,15 +27,14 @@ class CreateTransaction extends Transaction
 
             $account_to = Account::findOne($this->account_to);
             if ($account_to !== null) {
-//                Account::findOne($this->account_to);
                 $account_to->balance += (float)$this->amount;
                 $this->balance_after_to = $account_to->balance;
             } else {
                 throw new \Exception('Operation aborted: Account_to does not exist');
             }
 
-            if (Account::findOne($this->account_from)) {
-                $account_from = Account::findOne($this->account_from);
+            $account_from = Account::findOne($this->account_from);
+            if ($account_from !== null) {
                 $account_from->balance -= (float)$this->amount;
                 $this->balance_after_from = $account_from->balance;
             } else {

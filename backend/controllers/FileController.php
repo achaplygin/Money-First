@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: achaplygin
- * Date: 25.03.19
- * Time: 17:33
- */
+
 
 namespace backend\controllers;
 
@@ -40,6 +35,10 @@ class FileController extends Controller
         return $this->render('upload', ['model' => $model]);
     }
 
+    /**
+     * @return string
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     public function actionRead()
     {
         $reader = new Xls();
