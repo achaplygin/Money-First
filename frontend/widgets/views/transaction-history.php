@@ -1,4 +1,5 @@
 <?php
+/** @var $dataProvider \yii\data\ActiveDataProvider*/
 
 use yii\grid\GridView;
 use common\models\User;
