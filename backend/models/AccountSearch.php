@@ -8,6 +8,11 @@ use common\models\Account;
 
 /**
  * AccountSearch represents the model behind the search form of `common\models\Account`.
+ *
+ * @property string $username
+ * @property string $email
+ * @property float $minBalance
+ * @property float $maxBalance
  */
 class AccountSearch extends Account
 {
@@ -43,7 +48,6 @@ class AccountSearch extends Account
      * Creates data provider instance with search query applied
      *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)
@@ -84,11 +88,6 @@ class AccountSearch extends Account
             ]);
 
         return $dataProvider;
-    }
-
-    public function reset()
-    {
-
     }
 
 }

@@ -2,8 +2,6 @@
 
 namespace common\models;
 
-use Yii;
-
 /**
  * This is the model class for table "account".
  *
@@ -77,32 +75,18 @@ class Account extends \yii\db\ActiveRecord
     }
 
     /**
-     * todo No comments
-     * @param int|null $accId
+     * Get list of accounts in human-friendly format, indexed by account_id.
+     *
+     * @param bool|null $isAdmin If true - only system account will returned.
+     * @param int|null $accId Result just for this account.
      * @return array
      */
-    public function getSystemAccountList(int $accId = null)
+    public function getAccountList(bool $isAdmin = null, int $accId = null): array
     {
         return Account::find()
             ->select(["CONCAT('Account: ', account.id, ' of ', username) as account_label", 'account.id as account_id'])
-            ->joinWith('user',false, 'JOIN')
-            ->andWhere(['is_admin' => true])
-            ->andFilterWhere(['account_id' => $accId])
-            ->orderBy('account_id')
-            ->indexBy('account_id')
-            ->asArray(true)->column();
-    }
-
-    /**
-     * todo No comments
-     * @param int|null $accId
-     * @return array
-     */
-    public function getAccountList(int $accId = null)
-    {
-        return Account::find()
-            ->select(["CONCAT('Account: ', account.id, ' of ', username) as account_label", 'account.id as account_id'])
-            ->joinWith('user',false, 'JOIN')
+            ->joinWith('user', false, 'JOIN')
+            ->andFilterWhere(['is_admin' => $isAdmin])
             ->andFilterWhere(['account_id' => $accId])
             ->orderBy('account_id')
             ->indexBy('account_id')

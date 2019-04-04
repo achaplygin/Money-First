@@ -30,19 +30,19 @@ use yii\widgets\ActiveForm;
     <div class="col-lg-6" style="padding-left: 0px;">
         <?= $form->field($model, 'email') ?>
     </div>
-<div class="col-lg-12" style="padding: 0px;">
-    <div class="col-lg-3" style="padding-left: 0px;">
-        <?= $form->field($model, 'minBalance') ?>
-    </div>
+    <div class="col-lg-12" style="padding: 0px;">
+        <div class="col-lg-3" style="padding-left: 0px;">
+            <?= $form->field($model, 'minBalance') ?>
+        </div>
 
-    <div class="col-lg-3" style="padding-left: 0px;">
-        <?= $form->field($model, 'maxBalance') ?>
+        <div class="col-lg-3" style="padding-left: 0px;">
+            <?= $form->field($model, 'maxBalance') ?>
+        </div>
+        <div class="col-lg-6" style="padding-left: 0px; height: 74px;">
+            <label>&nbsp;</label>
+            <?= Html::submitButton('Search', ['class' => 'btn btn-primary col-lg-12']) ?>
+        </div>
     </div>
-    <div class="col-lg-6" style="padding-left: 0px; height: 74px;">
-        <label>&nbsp;</label>
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary col-lg-12']) ?>
-    </div>
-</div>
-    <?php ActiveForm::end(); /*class="form-group"*/?>
+    <?php ActiveForm::end(); ?>
 
 </div>

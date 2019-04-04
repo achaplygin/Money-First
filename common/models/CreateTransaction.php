@@ -12,7 +12,9 @@ class CreateTransaction extends Transaction
 {
 
     /**
-     * todo No comments
+     * Creating transaction and modify account_from and account_to balances.
+     * If each step is success, wrote all changes to db.
+     *
      * @throws \Exception
      */
     public function createTransaction(): void

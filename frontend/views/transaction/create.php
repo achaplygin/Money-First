@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($model, 'amount')->textInput(['autofocus' => true]) ?>
 
-                <?= $form->field($model, 'account_to')->dropDownList(Account::getSystemAccountList()) ?>
+                <?= $form->field($model, 'account_to')->dropDownList(Account::getAccountList(true)) ?>
 
                 <div class="form-group">
                     <?= Html::submitButton('Submit', ['class' => 'btn btn-danger',

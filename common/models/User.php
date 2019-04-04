@@ -7,7 +7,6 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use yii\helpers\ArrayHelper;
 
 /**
  * User model
@@ -32,8 +31,12 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
-    //public $is_admin;
-
+    /**
+     * Creating default account for new user.
+     *
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
     public function afterSave($insert, $changedAttributes)
     {
         if ($insert) {
@@ -60,7 +63,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -106,7 +109,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
-
 
     /**
      * Finds user by password reset token
@@ -181,7 +183,8 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Generates password hash from password and sets it to the model
      *
-     * @param string $password
+     * @param $password
+     * @throws \yii\base\Exception
      */
     public function setPassword($password)
     {
@@ -190,6 +193,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates "remember me" authentication key
+     * @throws \yii\base\Exception
      */
     public function generateAuthKey()
     {
@@ -198,6 +202,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates new password reset token
+     * @throws \yii\base\Exception
      */
     public function generatePasswordResetToken()
     {
@@ -246,6 +251,9 @@ class User extends ActiveRecord implements IdentityInterface
         return $timestamp + $expire >= time();
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getAccount()
     {
         return $this->hasOne(Account::class, ['user_id' => 'id']);

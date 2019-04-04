@@ -2,11 +2,11 @@
 
 namespace frontend\controllers;
 
-use common\models\User;
 use Yii;
+use common\models\User;
+use yii\web\Controller;
 use common\models\Transaction;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
 
 /**
  * Statistic controller
@@ -14,6 +14,13 @@ use yii\web\Controller;
 class StatisticController extends Controller
 {
 
+    /**
+     * Index page of user's statistic.
+     * Collecting incoming and outgoing transactions for current user.
+     * Calculating total sum for each of directions.
+     *
+     * @return string
+     */
     public function actionIndex()
     {
         /* @var User $userAccId */

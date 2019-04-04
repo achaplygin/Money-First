@@ -21,6 +21,13 @@ use PhpOffice\PhpSpreadsheet\Reader\Xls;
  *  -Creating relevant users and accounts if required.
  *  -Calling a method to create a transaction.
  *
+ * @property float $amount;
+ * @property string $created_at;
+ * @property int $account;
+ * @property bool $is_income;
+ * @property int $account_to
+ * @property int $account_from
+ *
  * @package backend\models
  */
 class TransactionImport extends Model

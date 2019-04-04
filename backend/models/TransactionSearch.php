@@ -9,6 +9,15 @@ use yii\db\ActiveQuery;
 
 /**
  * TransactionSearch represents the model behind the search form of `common\models\Transaction`.
+ *
+ *
+ * @property string $minDate
+ * @property string $maxDate
+ * @property string $creator
+ * @property string $userFrom
+ * @property string $userTo
+ * @property float $minAmount
+ * @property float $maxAmount
  */
 class TransactionSearch extends Transaction
 {

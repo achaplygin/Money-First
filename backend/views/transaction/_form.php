@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Used on "Create Transaction" Page
+ */
+
 use yii\helpers\Html;
 use common\widgets\Alert;
 use common\models\Account;
@@ -20,7 +24,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'amount')->textInput() ?>
 
-    <?= $form->field($model, 'account_from')->dropDownList(Account::getSystemAccountList()) ?>
+    <?= $form->field($model, 'account_from')->dropDownList(Account::getAccountList(true)) ?>
 
     <?= $form->field($model, 'account_to')->textInput() ?>
 

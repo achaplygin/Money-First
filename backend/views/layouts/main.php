@@ -36,13 +36,13 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Transaction', 'url' => ['/transaction']],
-    ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
+        $menuItems = [
+            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'Transaction', 'url' => ['/transaction']],
+        ];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
@@ -64,7 +64,16 @@ AppAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
-        <?= $content ?>
+        <div class="col-lg-9">
+            <?= $content ?>
+        </div>
+        <div class="col-lg-3">
+            <?php
+            if (!Yii::$app->user->isGuest) {
+                echo \backend\widgets\AdminSidebar::widget();
+            }
+            ?>
+        </div>
     </div>
 </div>
 

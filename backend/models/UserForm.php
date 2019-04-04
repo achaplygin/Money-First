@@ -1,18 +1,19 @@
 <?php
 
-namespace frontend\models;
+namespace backend\models;
 
 use yii\base\Model;
 use common\models\User;
 
 /**
- * Signup form
+ * Create User form
  */
-class SignupForm extends Model
+class UserForm extends Model
 {
     public $username;
     public $email;
     public $password;
+    public $is_admin;
 
 
     /**
@@ -24,7 +25,7 @@ class SignupForm extends Model
             ['username', 'trim'],
             ['username', 'required'],
             ['username', 'filter', 'filter' => '\yii\helpers\HtmlPurifier::process'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            //['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
@@ -32,22 +33,23 @@ class SignupForm extends Model
             ['email', 'filter', 'filter' => '\yii\helpers\HtmlPurifier::process'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            //['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+
+            ['is_admin', 'boolean']
         ];
     }
 
     /**
-     * Signs user up.
-     *
-     * @return User|null the saved model or null if saving fails
+     * @return User|null
+     * @throws \yii\base\Exception
      */
-    public function signup()
+    public function createUser(): bool
     {
         if (!$this->validate()) {
-            return null;
+            return false;
         }
 
         $user = new User();
@@ -56,6 +58,25 @@ class SignupForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
 
-        return $user->save() ? $user : null;
+        return $user->save();
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function updateUser(User $user): bool
+    {
+        if (!$this->validate()) {
+            return false;
+        }
+
+        $user->username = $this->username;
+        $user->email = $this->email;
+        $user->is_admin = $this->is_admin;
+        $user->setPassword($this->password);
+
+        return $user->save();
     }
 }

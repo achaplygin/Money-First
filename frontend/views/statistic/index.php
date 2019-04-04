@@ -3,8 +3,8 @@
 
 /* @var $dataProviderFrom yii\data\ActiveDataProvider */
 /* @var $dataProviderTo yii\data\ActiveDataProvider */
-/* @var $amountFromSum float*/
-/* @var $amountToSum float*/
+/* @var $amountFromSum float */
+/* @var $amountToSum float */
 
 use common\models\Account;
 use common\models\User;

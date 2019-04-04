@@ -11,7 +11,7 @@ use yii\helpers\Html;
     <br><br>
     <?= Html::a('Create Transaction', ['transaction/create'], ['class' => 'btn btn-success col-lg-12']); ?>
     <br><br>
-    <?= Html::a('Edit Users', ['user/index'], ['class' => 'btn btn-danger col-lg-12']); //todo Users Edit   ?>
+    <?= Html::a('Edit Users', ['user/index'], ['class' => 'btn btn-danger col-lg-12']); ?>
     <br><br>
     <div>
         <h2>Balances</h2>
@@ -20,7 +20,7 @@ use yii\helpers\Html;
         foreach ($balances as $value) {
             echo "<h4 class=\"col-lg-4\">"
                 . $value['username']
-                . "</h4><h4 class=\"col-lg-8\" align='right'>"
+                . "</h4><h4 class=\"col-lg-8\" style='text-align: right'>"
                 . Yii::$app->formatter->asCurrency($value['balance'])
                 . "<br></h4>";
         }

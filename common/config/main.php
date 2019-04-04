@@ -8,6 +8,7 @@ return [
     'components' => [
         'formatter' => [
             'dateFormat' => 'dd.MM.yyyy',
+            'datetimeFormat' => 'dd.MM.yyyy H:i:s',
             'thousandSeparator' => '&nbsp;',
             'currencyCode' => '$',
         ],

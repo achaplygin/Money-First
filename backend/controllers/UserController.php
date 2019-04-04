@@ -4,17 +4,17 @@ namespace backend\controllers;
 
 use Yii;
 use yii\web\Controller;
+use common\models\User;
 use yii\filters\VerbFilter;
+use backend\models\UserForm;
 use yii\filters\AccessControl;
-use common\models\Transaction;
+use backend\models\UserSearch;
 use yii\web\NotFoundHttpException;
-use common\models\CreateTransaction;
-use backend\models\TransactionSearch;
 
 /**
- * TransactionController implements the CRUD actions for Transaction model.
+ * UserController implements the CRUD actions for User model.
  */
-class TransactionController extends Controller
+class UserController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -37,7 +37,7 @@ class TransactionController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::class,
+               'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -46,15 +46,13 @@ class TransactionController extends Controller
     }
 
     /**
-     * Lists all Transaction models.
+     * Lists all User models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new TransactionSearch();
+        $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->pagination = ['pagesize' => 10];
-        $dataProvider->sort = false;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -63,8 +61,7 @@ class TransactionController extends Controller
     }
 
     /**
-     * Displays a single Transaction model.
-     *
+     * Displays a single User model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -77,79 +74,66 @@ class TransactionController extends Controller
     }
 
     /**
-     * Creates a new Transaction model.
-     * If creation is successful, the browser will be redirected to the previous page.
-     *
+     * Creates a new User.
      * @return string|\yii\web\Response
+     * @throws \yii\base\Exception
      */
     public function actionCreate()
     {
-
-        $model = new CreateTransaction();
-        $model->user_id = Yii::$app->user->id;
-
+        $model = new UserForm();
         if ($model->load(Yii::$app->request->post())) {
-            try {
-                $model->createTransaction();
-                Yii::$app->session->setFlash('createUserTransaction', 'ok');
-                return $this->goBack();
-            } catch (\Exception $e) {
-                Yii::$app->session->setFlash('createUserTransaction', $e->getMessage());
+            if ($model->createUser()) {
+                return $this->redirect('/user');
             }
-        } else {
-            Yii::$app->session->setFlash('createUserTransaction', 'Please fill out the following form');
-        }
-        return $this->render('create', ['model' => $model]);
-    }
-
-    /**
-     * Updates an existing Transaction model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
+        return $this->render('create', [
             'model' => $model,
         ]);
     }
 
     /**
+     * Updates an existing User model.
+     * If update is successful, the browser will be redirected to the 'view' page.
      * @param $id
-     * @return \yii\web\Response
+     * @return string|\yii\web\Response
      * @throws NotFoundHttpException
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
+     * @throws \yii\base\Exception
      */
-    public function actionDelete($id)
+    public function actionUpdate($id)
     {
-        $this->findModel($id)->delete();
+        $user = $this->findModel($id);
+        $model = new UserForm();
+        $model->username = $user->username;
+        $model->email = $user->email;
+        $model->is_admin = $user->is_admin;
+        $model->password = '';
 
-        return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->updateUser($user)) {
+                return $this->redirect(['view', 'id' => $user->id]);
+            }
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+            'user' => $user,
+        ]);
     }
 
     /**
-     * Finds the Transaction model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Transaction the loaded model
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Transaction::findOne($id)) !== null) {
+        if (($model = User::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
 }

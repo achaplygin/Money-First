@@ -5,7 +5,6 @@ namespace backend\controllers;
 use Yii;
 use yii\web\Controller;
 use common\models\User;
-use common\models\Account;
 use yii\filters\VerbFilter;
 use common\models\LoginForm;
 use yii\filters\AccessControl;
@@ -70,7 +69,7 @@ class SiteController extends Controller
     {
         $searchModel = new AccountSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->pagination = ['pageSize' => 15];
+        $dataProvider->pagination = ['pageSize' => 10];
         $dataProvider->sort = [
             'attributes' => [
                 'id',

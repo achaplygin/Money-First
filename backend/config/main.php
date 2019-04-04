@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
+    'name' => 'Admin: Money First',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
@@ -23,7 +24,7 @@ return [
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
-            'name' => 'advanced-backend',
+            'name' => 'money-first-backend',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use yii\helpers\Html;
@@ -43,24 +44,21 @@ AppAsset::register($this);
         $menuItems = [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Statistic', 'url' => ['/statistic']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
         ];
-        $user=User::findOne(Yii::$app->user->id);
+        /** @var User $user */
+        $user = Yii::$app->user->identity;
+
         if ($user->is_admin) {
             $menuItems[] = '<li>'
                 . Html::beginForm(['/site/admin-panel'], 'get')
-                . Html::submitButton(
-                    'Admin Panel',
-                    ['class' => 'btn btn-danger logout']
-                )
+                . Html::submitButton('Admin Panel', ['class' => 'btn btn-danger logout'])
                 . Html::endForm()
                 . '</li>';
         }
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                'Logout (' . $user->username . ')',
                 ['class' => 'btn btn-success logout']
             )
             . Html::endForm()

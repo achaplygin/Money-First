@@ -13,11 +13,11 @@ $this->title = 'Transactions';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-index">
-    <div class="col-lg-9">
-        <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
+    <div>
         <?php echo $this->render('_search', ['model' => $searchModel]); ?>
-
-
+    </div>
+    <div>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'layout' => "{items}\n{pager}",
@@ -37,8 +37,5 @@ $this->params['breadcrumbs'][] = $this->title;
                 'accountTo.user.username:text:User To',
             ],
         ]); ?>
-    </div>
-    <div class="col-lg-3">
-        <?= \backend\widgets\AdminSidebar::widget(); ?>
     </div>
 </div>

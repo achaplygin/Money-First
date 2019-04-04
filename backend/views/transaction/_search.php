@@ -1,4 +1,7 @@
 <?php
+/**
+ * Used on index page of "Transactions"
+ */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -42,7 +45,7 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Reset', '/transaction',['class' => 'btn btn-default']) ?>
+        <?= Html::a('Reset', '/transaction', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

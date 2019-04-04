@@ -14,7 +14,8 @@ use common\models\CreateTransaction;
 class TransactionController extends Controller
 {
     /**
-     * todo написать пару слов о создании транзакций
+     * Loading user request, collecting required data and starting process of transaction doing.
+     *
      * @return string|\yii\web\Response
      */
     public function actionCreate()
@@ -29,7 +30,7 @@ class TransactionController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             try {
                 if (!Account::findOne($model->account_to)->user->is_admin) {
-                    throw new ForbiddenHttpException('Вы не можете переводить средства на счёт другого контрагента');
+                    throw new ForbiddenHttpException('You cannot transfer money to another user’s account.');
                 }
                 $model->createTransaction();
                 Yii::$app->session->setFlash('createUserTransaction', 'ok');
