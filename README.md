@@ -16,16 +16,9 @@ Used:
 - Yii 2 Advanced Template
 
 
-Установка с помощью Composer
+Установка проекта
 ---
-Установить файлы проекта:
-```
-composer create-project --prefer-dist achaplygin/Money-First _project_dir_
-```
-
-Установка из архива
----
-1. Скопировать файлы проекта. 
+1. Скопировать/распаковать файлы проекта. 
 2. В директории проекта выполнить:
 ```
 composer install
@@ -34,16 +27,24 @@ composer install
 ---
 - Выполнить инициализацию:
 ```
-php /_project_dir_/init
+php /_project_dir_/init --env=Development --overwrite=All
 ```
 ***
-- Создать новую БД и пользователя yii:
+- Создать в PostgreSQL пользователя yii с паролем yii и новую БД с названием yii
+_(и что бы нормально работало, пользователю надо дать привилегии в базе)_:
+```
+CREATE USER "yii" WITH password 'yii';
+CREATE DATABASE "yii" WITH owner = "yii";
+GRANT ALL privileges ON DATABASE "yii" TO "yii";
+```
+
+Ну, или поменять конфиг подключения в: _./common/config/main-local.php_ для других пользователя и базы, на свой вкус.
 ```
 'dsn' => 'pgsql:host=localhost;dbname=yii',
 'username' => 'yii',
 'password' => 'yii',
 ```
-Ну, или поменять конфиг подключения в: _./common/config/main-local.php_ для своих пользователя и базы.
+
 ***
 - Применить миграции
 ```
@@ -52,16 +53,17 @@ php /_project_dir_/init
 ***
 - Настроить веб-сервер
 
-  - Для фронта корневая директория ```/_project_dir_/frontend/web/``` и URL ```http://first.test/```
-  - Для админки корневая директория ```/_project_dir_/backend/web/``` и URL ```http://admin.test/```
+  - Для фронта корневая директория ```/_project_dir_/frontend/web/``` и URL ```http://moneyfirst.test/```
+  - Для админки корневая директория ```/_project_dir_/backend/web/``` и URL ```http://admin.moneyfirst.test/```
 
 Есть готовые конфиги для nginx: ```/_project_dir_/vagrant/nginx/app.conf```
 ***
 - Добавить домены в файл _/etc/hosts_:
 ```
-127.0.0.1   first.test
-127.0.0.1   admin.test
+127.0.0.1   moneyfirst.test
+127.0.0.1   admin.moneyfirst.test
 ```
+Перезапустить веб-сервер, разумеется.
 ***
 Готово
 ---
@@ -74,7 +76,4 @@ php /_project_dir_/init
 Что сделано, что не сделано
 ---------------------------
 
-```
-Всё сделал, потому что могу.
 
-```
