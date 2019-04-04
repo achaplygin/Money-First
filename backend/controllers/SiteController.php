@@ -3,6 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\helpers\BaseStringHelper;
+use yii\helpers\StringHelper;
 use yii\web\Controller;
 use common\models\User;
 use yii\filters\VerbFilter;
@@ -101,7 +103,8 @@ class SiteController extends Controller
             if (!$current_user->is_admin) {
                 $current_user->generateAuthToken();
                 Yii::$app->user->logout();
-                return $this->redirect('http://first.test/site/auth?hash=' . $current_user->auth_token);
+                $domain = BaseStringHelper::byteSubstr($_SERVER['SERVER_NAME'], 6);
+                return $this->redirect('http://'.$domain.'/site/auth?hash=' . $current_user->auth_token);
             }
             return $this->goBack();
         } else {
