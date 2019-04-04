@@ -3,6 +3,9 @@
 /yii_test
 /yii_test.bat
 
+# ignore uploaded xls files
+/backend/web/uploads/*.xls
+
 # phpstorm project files
 .idea
 
@@ -41,6 +44,3 @@ phpunit.phar
 /backend/web/index.php
 /backend/web/index-test.php
 /backend/web/robots.txt
-
-# ignore uploaded files
-/backend/web/uploads/*
