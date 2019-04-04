@@ -205,7 +205,7 @@ class SiteController extends Controller
         $currentUser = Yii::$app->user->identity;
         if ($currentUser->is_admin) {
             $currentUser->generateAuthToken();
-            return $this->redirect('http://admin.test/site/auth?hash=' . $currentUser->auth_token);
+            return $this->redirect('http://admin.'.$_SERVER['SERVER_NAME'].'/site/auth?hash=' . $currentUser->auth_token);
         } else {
             throw new ForbiddenHttpException('Доступ только для администраторов');
         }
