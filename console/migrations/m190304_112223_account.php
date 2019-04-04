@@ -10,6 +10,7 @@ class m190304_112223_account extends Migration
 {
     /**
      * @return bool|void
+     * @throws \yii\base\Exception
      */
     public function up()
     {
@@ -32,12 +33,9 @@ class m190304_112223_account extends Migration
         $admin->username = 'admin';
         $admin->email = 'admin@example.com';
         $admin->setPassword('123456');
+        $admin->is_admin = true;
         $admin->generateAuthKey();
         $admin->save();
-
-        $this->update('{{%user}}', [
-            'is_admin' => true
-        ], "username='admin'");
 
         $this->update(
             'account',
