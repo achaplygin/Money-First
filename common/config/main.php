@@ -2,7 +2,7 @@
 return [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -10,11 +10,10 @@ return [
             'dateFormat' => 'dd.MM.yyyy',
             'datetimeFormat' => 'dd.MM.yyyy H:i:s',
             'thousandSeparator' => '&nbsp;',
-            'currencyCode' => '$',
+            'currencyCode' => 'USD',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
     ],
 ];
-

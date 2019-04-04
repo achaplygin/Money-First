@@ -96,7 +96,7 @@ class SiteController extends Controller
 
             return $this->render(
                 'login', [
-                'model' => $model,
+                    'model' => $model,
                 ]
             );
         }
@@ -132,7 +132,7 @@ class SiteController extends Controller
 
         return $this->render(
             'signup', [
-            'model' => $model,
+                'model' => $model,
             ]
         );
     }
@@ -158,7 +158,7 @@ class SiteController extends Controller
 
         return $this->render(
             'requestPasswordResetToken', [
-            'model' => $model,
+                'model' => $model,
             ]
         );
     }
@@ -166,7 +166,7 @@ class SiteController extends Controller
     /**
      * Resets password.
      *
-     * @param  string $token
+     * @param string $token
      * @return mixed
      * @throws BadRequestHttpException
      * @throws \yii\base\Exception
@@ -187,7 +187,7 @@ class SiteController extends Controller
 
         return $this->render(
             'resetPassword', [
-            'model' => $model,
+                'model' => $model,
             ]
         );
     }
@@ -205,7 +205,9 @@ class SiteController extends Controller
         $currentUser = Yii::$app->user->identity;
         if ($currentUser->is_admin) {
             $currentUser->generateAuthToken();
-            return $this->redirect('http://admin.'.$_SERVER['SERVER_NAME'].'/site/auth?hash=' . $currentUser->auth_token);
+            return $this->redirect(
+                'http://admin.' . $_SERVER['SERVER_NAME']
+                . '/site/auth?hash=' . $currentUser->auth_token);
         } else {
             throw new ForbiddenHttpException('Доступ только для администраторов');
         }
@@ -215,7 +217,7 @@ class SiteController extends Controller
     {
         $user = User::findOne(
             [
-            'auth_token' => $hash
+                'auth_token' => $hash
             ]
         );
 
