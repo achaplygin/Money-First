@@ -10,10 +10,12 @@ use yii\widgets\ActiveForm;
 
 <div class="account-search">
 
-    <?php $form = ActiveForm::begin([
+    <?php $form = ActiveForm::begin(
+        [
         'action' => ['index'],
         'method' => 'get',
-    ]); ?>
+        ]
+    ); ?>
 
     <div class="col-lg-6" style="padding-left: 0px;">
         <?= $form->field($model, 'id') ?>

@@ -34,7 +34,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Creating default account for new user.
      *
-     * @param bool $insert
+     * @param bool  $insert
      * @param array $changedAttributes
      */
     public function afterSave($insert, $changedAttributes)
@@ -97,7 +97,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Finds user by username
      *
-     * @param string $username
+     * @param  string $username
      * @return static|null
      */
     public static function findByUsername($username)
@@ -113,7 +113,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Finds user by password reset token
      *
-     * @param string $token password reset token
+     * @param  string $token password reset token
      * @return static|null
      */
     public static function findByPasswordResetToken($token)
@@ -122,16 +122,18 @@ class User extends ActiveRecord implements IdentityInterface
             return null;
         }
 
-        return static::findOne([
+        return static::findOne(
+            [
             'password_reset_token' => $token,
             'status' => self::STATUS_ACTIVE,
-        ]);
+            ]
+        );
     }
 
     /**
      * Finds out if password reset token is valid
      *
-     * @param string $token password reset token
+     * @param  string $token password reset token
      * @return bool
      */
     public static function isPasswordResetTokenValid($token)
@@ -172,7 +174,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Validates password
      *
-     * @param string $password password to validate
+     * @param  string $password password to validate
      * @return bool if password provided is valid for current user
      */
     public function validatePassword($password)
@@ -183,7 +185,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Generates password hash from password and sets it to the model
      *
-     * @param $password
+     * @param  $password
      * @throws \yii\base\Exception
      */
     public function setPassword($password)
@@ -193,6 +195,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates "remember me" authentication key
+     *
      * @throws \yii\base\Exception
      */
     public function generateAuthKey()
@@ -202,6 +205,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates new password reset token
+     *
      * @throws \yii\base\Exception
      */
     public function generatePasswordResetToken()
@@ -219,6 +223,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates new auth token with timestamp
+     *
      * @throws \yii\base\Exception
      */
     public function generateAuthToken()
@@ -238,7 +243,8 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Finds out if auth token is valid
-     * @param $token
+     *
+     * @param  $token
      * @return bool
      */
     public static function isAuthTokenValid($token)

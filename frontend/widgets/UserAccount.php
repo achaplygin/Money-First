@@ -8,6 +8,7 @@ use common\models\Account;
 
 /**
  * Class UserAccount
+ *
  * @package common\widgets
  */
 class UserAccount extends \yii\bootstrap\Widget
@@ -20,7 +21,7 @@ class UserAccount extends \yii\bootstrap\Widget
      */
     public function init()
     {
-        /** @var User $user */
+        /* @var User $user */
         $user = Yii::$app->user->identity;
         if (!$user->is_admin) {
             $this->balance = Account::findOne(['user_id' => $user->getId()])->balance;
@@ -36,6 +37,7 @@ class UserAccount extends \yii\bootstrap\Widget
 
     /**
      * render view file
+     *
      * @return string
      */
     public function run()

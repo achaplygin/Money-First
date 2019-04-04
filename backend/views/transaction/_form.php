@@ -19,7 +19,8 @@ use yii\widgets\ActiveForm;
         'alertTypes' => [
             'createUserTransaction' => 'alert-info'
         ],
-    ]) ?>
+        ]
+    ) ?>
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'amount')->textInput() ?>

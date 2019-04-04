@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'password_reset_token',
             'auth_token',
         ],
-    ]) ?>
+        ]
+    ) ?>
 
 </div>

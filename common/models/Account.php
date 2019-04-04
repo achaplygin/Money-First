@@ -77,8 +77,8 @@ class Account extends \yii\db\ActiveRecord
     /**
      * Get list of accounts in human-friendly format, indexed by account_id.
      *
-     * @param bool|null $isAdmin If true - only system account will returned.
-     * @param int|null $accId Result just for this account.
+     * @param  bool|null $isAdmin If true - only system account will returned.
+     * @param  int|null  $accId   Result just for this account.
      * @return array
      */
     public function getAccountList(bool $isAdmin = null, int $accId = null): array

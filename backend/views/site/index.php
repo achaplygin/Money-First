@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'style' => $model->user->is_admin ? 'font-weight: bold;' : '',
                 ];
             },
-        ]) ?>
+            ]
+        ) ?>
     </div>
 </div>

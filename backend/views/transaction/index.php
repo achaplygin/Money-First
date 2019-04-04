@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'account_to',
                 'accountTo.user.username:text:User To',
             ],
-        ]); ?>
+            ]
+        ); ?>
     </div>
 </div>

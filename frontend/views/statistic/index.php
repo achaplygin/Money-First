@@ -12,7 +12,7 @@ use yii\grid\GridView;
 
 $this->title = 'Statistic';
 
-/** @var User $user */
+/* @var User $user */
 $user = Yii::$app->user->identity;
 $list = Account::getAccountList();
 
@@ -47,20 +47,22 @@ $list = Account::getAccountList();
                     }
                 ],
             ]
-        ]);
+            ]
+        );
         ?>
         <h3>
             Total Paid
         </h3>
         <hr>
         <h2 style="text-align: right">
-            <?= Yii::$app->formatter->asCurrency($amountFromSum) ?>
+            <?php echo Yii::$app->formatter->asCurrency($amountFromSum) ?>
         </h2>
     </div>
     <div class="col-lg-6">
         <h3>Incoming</h3>
         <?=
-        GridView::widget([
+        GridView::widget(
+            [
             'dataProvider' => $dataProviderTo,
             'layout' => "{items}\n{pager}",
             'columns' => [
@@ -85,7 +87,8 @@ $list = Account::getAccountList();
                     }
                 ],
             ]
-        ]);
+            ]
+        );
         ?>
         <h3>
             Total Received

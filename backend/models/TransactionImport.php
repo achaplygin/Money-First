@@ -42,6 +42,7 @@ class TransactionImport extends Model
 
     /**
      * Rules for validate parsed data from file
+     *
      * @return array
      */
     public function rules()
@@ -55,13 +56,15 @@ class TransactionImport extends Model
             [['amount'], 'compare', 'compareValue' => 0, 'operator' => '>'],
             [['amount', 'account', 'created_at'],
                 function ($attribute) {
-                    if (Transaction::find()
-                        ->andWhere([
+                    if (Transaction::find()->andWhere(
+                        [
                             'amount' => $this->amount,
                             'created_at' => $this->created_at,
                             'account_to' => $this->account_to,
                             'account_from' => $this->account_from,
-                        ])->exists()) {
+                            ]
+                    )->exists()
+                    ) {
                         $this->addError($attribute, 'Not uniq');
                     }
                 }],
@@ -69,7 +72,7 @@ class TransactionImport extends Model
     }
 
     /**
-     * @param string $fullpath - Full path to uploaded file.
+     * @param  string $fullpath - Full path to uploaded file.
      * @return array - The array of the required data mapped by first line indexes.
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
@@ -88,25 +91,25 @@ class TransactionImport extends Model
         foreach ($data as $n => $item) {
             foreach ($item as $i => $value) {
                 switch ($keys[$i]) {
-                    case 'account_to':
-                        $res[$n]['account_to'] = (int)$value ?: null;
-                        break;
-                    case 'account_from':
-                        $res[$n]['account_from'] = (int)$value ?: null;
-                        break;
-                    case 'amount':
-                        $res[$n]['amount'] = (float)$value ?: null;
-                        break;
-                    case 'created_at':
-                        $res[$n]['created_at'] = (string)$value ?: null;
-                        //date_format(date_create_from_format('Y-m-d H:i:s', $value), 'Y-m-d H:i:s');
-                        break;
-                    case 'is_income':
-                        $res[$n]['is_income'] = (bool)$value;
-                        break;
+                case 'account_to':
+                    $res[$n]['account_to'] = (int)$value ?: null;
+                    break;
+                case 'account_from':
+                    $res[$n]['account_from'] = (int)$value ?: null;
+                    break;
+                case 'amount':
+                    $res[$n]['amount'] = (float)$value ?: null;
+                    break;
+                case 'created_at':
+                    $res[$n]['created_at'] = (string)$value ?: null;
+                    //date_format(date_create_from_format('Y-m-d H:i:s', $value), 'Y-m-d H:i:s');
+                    break;
+                case 'is_income':
+                    $res[$n]['is_income'] = (bool)$value;
+                    break;
 
-                    default:
-                        break;
+                default:
+                    break;
                 }
             }
         }
@@ -116,7 +119,7 @@ class TransactionImport extends Model
     /**
      * This function validate each line from array and launch process of creating transaction.
      *
-     * @param array $res - Mapped array of the required data.
+     * @param  array $res - Mapped array of the required data.
      * @throws \Exception
      */
     public static function import(array $res)
@@ -161,9 +164,9 @@ class TransactionImport extends Model
     /**
      * Matching of outgoing and target accounts with existing ones, or the creation of appropriate new ones.
      *
-     * @param int $account_from
-     * @param int $account_to
-     * @param bool $isIncome
+     * @param  int  $account_from
+     * @param  int  $account_to
+     * @param  bool $isIncome
      * @throws \yii\base\Exception
      */
     private function createAccounts(int $account_from, int $account_to, bool $isIncome)
@@ -189,11 +192,13 @@ class TransactionImport extends Model
             // -если не существует - создаём счёт админу.
             // -если существует - проверяем, что админский.
             if ($accTo === null) {
-                $accTo = new Account([
+                $accTo = new Account(
+                    [
                     'id' => $account_to,
                     'user_id' => User::findOne(['username' => 'admin'])->id,
                     'balance' => 0,
-                ]);
+                    ]
+                );
                 $accTo->save();
             } else {
                 if (!$accTo->user->is_admin) {
@@ -208,11 +213,13 @@ class TransactionImport extends Model
             // -если не существует - создаём счёт админу.
             // -если существует - проверяем, что админский.
             if ($accFrom === null) {
-                $accFrom = new Account([
+                $accFrom = new Account(
+                    [
                     'id' => $account_from,
                     'user_id' => User::findOne(['username' => 'admin'])->id,
                     'balance' => $this->amount,
-                ]);
+                    ]
+                );
                 $accFrom->save();
             } else {
                 if (!$accFrom->user->is_admin) {
@@ -242,7 +249,8 @@ class TransactionImport extends Model
     {
         $num = User::find()->count();
         if (User::findOne(['username' => 'user' . $num])
-            || User::findOne(['email' => 'user' . $num . '@mail.com'])) {
+            || User::findOne(['email' => 'user' . $num . '@mail.com'])
+        ) {
             $num = $num . '_' . Yii::$app->security->generateRandomString(3);
         }
         $username = 'user' . $num;

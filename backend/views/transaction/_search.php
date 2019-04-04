@@ -13,10 +13,12 @@ use yii\widgets\ActiveForm;
 
 <div class="transaction-search">
 
-    <?php $form = ActiveForm::begin([
+    <?php $form = ActiveForm::begin(
+        [
         'action' => ['index'],
         'method' => 'get',
-    ]); ?>
+        ]
+    ); ?>
 
     <div class="col-lg-3">
         <?= $form->field($model, 'minAmount') ?>

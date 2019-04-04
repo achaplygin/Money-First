@@ -2,8 +2,8 @@
 
 namespace console\controllers;
 
-use common\models\Account;
 use common\models\User;
+use common\models\Account;
 use yii\console\Controller;
 
 class TestController extends Controller
@@ -26,7 +26,7 @@ class TestController extends Controller
 
     public function actionAddMoney(int $userId): int
     {
-        /** @var Account $acc */
+        /* @var Account $acc */
         $acc = Account::findOne(['user_id' => $userId]);
 
         $acc->balance += 5000;

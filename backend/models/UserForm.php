@@ -62,7 +62,7 @@ class UserForm extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User $user
      * @return bool
      * @throws \yii\base\Exception
      */

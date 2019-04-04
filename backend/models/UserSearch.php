@@ -45,9 +45,11 @@ class UserSearch extends User
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
+        $dataProvider = new ActiveDataProvider(
+            [
             'query' => $query,
-        ]);
+            ]
+        );
 
         $this->load($params);
 
@@ -58,13 +60,15 @@ class UserSearch extends User
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+        $query->andFilterWhere(
+            [
             'id' => $this->id,
             'is_admin' => $this->is_admin,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-        ]);
+            ]
+        );
 
         $query->andFilterWhere(['ilike', 'username', $this->username])
             ->andFilterWhere(['ilike', 'email', $this->email]);

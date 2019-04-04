@@ -7,11 +7,11 @@ use yii\helpers\Html;
 ?>
 
 <div>
-    <?= Html::a('Import Transactions', ['file/upload'], ['class' => 'btn btn-primary col-lg-12']); ?>
+    <?php echo Html::a('Import Transactions', ['file/upload'], ['class' => 'btn btn-primary col-lg-12']); ?>
     <br><br>
-    <?= Html::a('Create Transaction', ['transaction/create'], ['class' => 'btn btn-success col-lg-12']); ?>
+    <?php echo Html::a('Create Transaction', ['transaction/create'], ['class' => 'btn btn-success col-lg-12']); ?>
     <br><br>
-    <?= Html::a('Edit Users', ['user/index'], ['class' => 'btn btn-danger col-lg-12']); ?>
+    <?php echo Html::a('Edit Users', ['user/index'], ['class' => 'btn btn-danger col-lg-12']); ?>
     <br><br>
     <div>
         <h2>Balances</h2>

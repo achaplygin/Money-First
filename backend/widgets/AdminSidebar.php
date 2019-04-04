@@ -9,7 +9,7 @@ use common\models\Account;
  * Widget with system accounts's balances and admin's actions buttons.
  *
  * @property float $balances
- * @package backend\widgets
+ * @package  backend\widgets
  */
 class AdminSidebar extends \yii\bootstrap\Widget
 {

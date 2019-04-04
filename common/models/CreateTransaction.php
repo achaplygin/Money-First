@@ -6,6 +6,7 @@ use Yii;
 
 /**
  * Class UserTransaction
+ *
  * @package frontend\models
  */
 class CreateTransaction extends Transaction

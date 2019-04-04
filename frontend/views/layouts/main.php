@@ -30,13 +30,15 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
-    NavBar::begin([
+    NavBar::begin(
+        [
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
-    ]);
+        ]
+    );
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
@@ -45,7 +47,7 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Statistic', 'url' => ['/statistic']],
         ];
-        /** @var User $user */
+        /* @var User $user */
         $user = Yii::$app->user->identity;
 
         if ($user->is_admin) {
@@ -64,17 +66,20 @@ AppAsset::register($this);
             . Html::endForm()
             . '</li>';
     }
-    echo Nav::widget([
+    echo Nav::widget(
+        [
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
-    ]);
+        ]
+    );
     NavBar::end();
     ?>
 
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+            ]
+        ) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>

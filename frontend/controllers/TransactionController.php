@@ -20,7 +20,7 @@ class TransactionController extends Controller
      */
     public function actionCreate()
     {
-        /** @var \common\models\User $usr */
+        /* @var \common\models\User $usr */
         $usr = Yii::$app->user->identity;
 
         $model = new CreateTransaction();

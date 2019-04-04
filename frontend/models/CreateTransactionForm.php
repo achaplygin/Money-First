@@ -51,8 +51,10 @@ class CreateTransactionForm extends Model
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('create', [
+        return $this->render(
+            'create', [
             'model' => $model,
-        ]);
+            ]
+        );
     }
 }

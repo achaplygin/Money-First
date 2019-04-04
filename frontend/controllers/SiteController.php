@@ -12,7 +12,6 @@ use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
-use frontend\models\ContactForm;
 use common\models\User;
 use yii\web\ForbiddenHttpException;
 
@@ -95,9 +94,11 @@ class SiteController extends Controller
         } else {
             $model->password = '';
 
-            return $this->render('login', [
+            return $this->render(
+                'login', [
                 'model' => $model,
-            ]);
+                ]
+            );
         }
     }
 
@@ -111,39 +112,6 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return mixed
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
-            }
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return mixed
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
     }
 
     /**
@@ -162,15 +130,18 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('signup', [
+        return $this->render(
+            'signup', [
             'model' => $model,
-        ]);
+            ]
+        );
     }
 
     /**
      * Requests password reset.
      *
      * @return mixed
+     * @throws \yii\base\Exception
      */
     public function actionRequestPasswordReset()
     {
@@ -185,17 +156,20 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('requestPasswordResetToken', [
+        return $this->render(
+            'requestPasswordResetToken', [
             'model' => $model,
-        ]);
+            ]
+        );
     }
 
     /**
      * Resets password.
      *
-     * @param string $token
+     * @param  string $token
      * @return mixed
      * @throws BadRequestHttpException
+     * @throws \yii\base\Exception
      */
     public function actionResetPassword($token)
     {
@@ -211,20 +185,23 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        return $this->render('resetPassword', [
+        return $this->render(
+            'resetPassword', [
             'model' => $model,
-        ]);
+            ]
+        );
     }
 
     /**
      * Redirect to admin panel with auth by token
+     *
      * @return \yii\web\Response
      * @throws ForbiddenHttpException
      * @throws \yii\base\Exception
      */
     public function actionAdminPanel()
     {
-        /** @var User $currentUser */
+        /* @var User $currentUser */
         $currentUser = Yii::$app->user->identity;
         if ($currentUser->is_admin) {
             $currentUser->generateAuthToken();
@@ -236,10 +213,11 @@ class SiteController extends Controller
 
     public function actionAuth(string $hash)
     {
-        /** @var User $user */
-        $user = User::findOne([
+        $user = User::findOne(
+            [
             'auth_token' => $hash
-        ]);
+            ]
+        );
 
         if (($user !== null)) {
             Yii::$app->user->login($user);

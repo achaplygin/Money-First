@@ -34,14 +34,17 @@ class PasswordResetRequestForm extends Model
      * Sends an email with a link, for resetting the password.
      *
      * @return bool whether the email was send
+     * @throws \yii\base\Exception
      */
     public function sendEmail()
     {
         /* @var $user User */
-        $user = User::findOne([
+        $user = User::findOne(
+            [
             'status' => User::STATUS_ACTIVE,
             'email' => $this->email,
-        ]);
+            ]
+        );
 
         if (!$user) {
             return false;

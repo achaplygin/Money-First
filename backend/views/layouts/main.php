@@ -29,13 +29,15 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
-    NavBar::begin([
+    NavBar::begin(
+        [
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
-    ]);
+        ]
+    );
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
@@ -52,10 +54,12 @@ AppAsset::register($this);
             . Html::endForm()
             . '</li>';
     }
-    echo Nav::widget([
+    echo Nav::widget(
+        [
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
-    ]);
+        ]
+    );
     NavBar::end();
     ?>
 

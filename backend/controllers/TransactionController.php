@@ -47,6 +47,7 @@ class TransactionController extends Controller
 
     /**
      * Lists all Transaction models.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -56,24 +57,28 @@ class TransactionController extends Controller
         $dataProvider->pagination = ['pagesize' => 10];
         $dataProvider->sort = false;
 
-        return $this->render('index', [
+        return $this->render(
+            'index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
+            ]
+        );
     }
 
     /**
      * Displays a single Transaction model.
      *
-     * @param integer $id
+     * @param  integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        return $this->render(
+            'view', [
             'model' => $this->findModel($id),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -105,7 +110,8 @@ class TransactionController extends Controller
     /**
      * Updates an existing Transaction model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     *
+     * @param  integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -117,13 +123,15 @@ class TransactionController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
+        return $this->render(
+            'update', [
             'model' => $model,
-        ]);
+            ]
+        );
     }
 
     /**
-     * @param $id
+     * @param  $id
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      * @throws \Throwable
@@ -139,7 +147,8 @@ class TransactionController extends Controller
     /**
      * Finds the Transaction model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     *
+     * @param  integer $id
      * @return Transaction the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

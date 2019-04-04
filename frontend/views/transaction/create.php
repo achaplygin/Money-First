@@ -19,7 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'alertTypes' => [
                         'createUserTransaction' => 'alert-info'
                     ],
-                ]) ?>
+                    ]
+                ) ?>
                 <?php $form = ActiveForm::begin(['id' => 'transaction-create-form']); ?>
 
                 <?= $form->field($model, 'amount')->textInput(['autofocus' => true]) ?>
@@ -31,7 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data' => [
                             'confirm' => 'Are you sure you want to send your money?',
                             'method' => 'post',
-                        ],]) ?>
+                        ],]
+                    ) ?>
                 </div>
                 <?php ActiveForm::end(); ?>
             </div>

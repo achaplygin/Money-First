@@ -1,15 +1,16 @@
 <?php
-/** @var $dataProvider \yii\data\ActiveDataProvider */
 
 use yii\grid\GridView;
 use common\models\User;
 use common\models\Account;
 
-/** @var \common\models\User $user */
+/* @var $dataProvider \yii\data\ActiveDataProvider */
+/* @var \common\models\User $user */
 $user = Yii::$app->user->identity;
 $list = Account::getAccountList();
 
-echo GridView::widget([
+echo GridView::widget(
+    [
     'dataProvider' => $dataProvider,
     'rowOptions' => function (\common\models\Transaction $model) use ($user) {
 
@@ -48,19 +49,20 @@ echo GridView::widget([
         [
             'label' => 'Account',
             'content' => function ($model) use ($list, $user) {
-                /** @var \common\models\Transaction $model */
+                /* @var \common\models\Transaction $model */
                 return $model->isIncome($user) ? $list[$model->account_from] : $list[$model->account_to];
             }
         ],
         [
             'label' => 'Balance After',
             'content' => function ($model) {
-                /** @var \common\models\User $user */
+                /* @var \common\models\User $user */
                 $user = Yii::$app->user->identity;
-                /** @var \common\models\Transaction $model */
+                /* @var \common\models\Transaction $model */
                 return $model->isIncome($user) ? $model->balance_after_to : $model->balance_after_from;
             },
         ],
     ],
     'layout' => "{items}\n{pager}\n",
-]);
+    ]
+);

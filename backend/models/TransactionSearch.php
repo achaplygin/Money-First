@@ -10,7 +10,6 @@ use yii\db\ActiveQuery;
 /**
  * TransactionSearch represents the model behind the search form of `common\models\Transaction`.
  *
- *
  * @property string $minDate
  * @property string $maxDate
  * @property string $creator
@@ -73,20 +72,24 @@ class TransactionSearch extends Transaction
             ->joinWith('user')
             ->joinWith('accountFrom accountFrom')
             ->joinWith('accountTo accountTo')
-            ->joinWith([
+            ->joinWith(
+                [
                 'accountFrom accFrom' => function (ActiveQuery $query) {
                     $query->joinWith('user userFrom');
                 },
                 'accountTo accTo' => function (ActiveQuery $query) {
                     $query->joinWith('user userTo');
-                }])
+                }]
+            )
             ->orderBy('transaction.created_at DESC');
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
+        $dataProvider = new ActiveDataProvider(
+            [
             'query' => $query,
-        ]);
+            ]
+        );
 
         $this->load($params);
 
@@ -97,48 +100,64 @@ class TransactionSearch extends Transaction
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+        $query->andFilterWhere(
+            [
             'amount' => $this->amount,
             'transaction.user_id' => $this->user_id,
             'account_to' => $this->account_to,
             'account_from' => $this->account_from,
             'created_at' => $this->created_at,
-        ])
-            ->andFilterWhere([
+            ]
+        )
+            ->andFilterWhere(
+                [
                 '>=',
                 'amount',
                 $this->minAmount
-            ])
-            ->andFilterWhere([
+                ]
+            )
+            ->andFilterWhere(
+                [
                 '<=',
                 'amount',
                 $this->maxAmount
-            ])
-            ->andFilterWhere([
+                ]
+            )
+            ->andFilterWhere(
+                [
                 'ilike',
                 'user.username',
                 $this->creator
-            ])
-            ->andFilterWhere([
+                ]
+            )
+            ->andFilterWhere(
+                [
                 'ilike',
                 'userFrom.username',
                 $this->userFrom
-            ])
-            ->andFilterWhere([
+                ]
+            )
+            ->andFilterWhere(
+                [
                 'ilike',
                 'userTo.username',
                 $this->userTo
-            ])
-            ->andFilterWhere([
+                ]
+            )
+            ->andFilterWhere(
+                [
                 '>=',
                 'transaction.created_at',
                 $this->minDate
-            ])
-            ->andFilterWhere([
+                ]
+            )
+            ->andFilterWhere(
+                [
                 '<=',
                 'transaction.created_at',
                 $this->maxDate
-            ]);
+                ]
+            );
 
         return $dataProvider;
     }

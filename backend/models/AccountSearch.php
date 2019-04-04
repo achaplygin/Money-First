@@ -47,7 +47,7 @@ class AccountSearch extends Account
     /**
      * Creates data provider instance with search query applied
      *
-     * @param array $params
+     * @param  array $params
      * @return ActiveDataProvider
      */
     public function search($params)
@@ -56,9 +56,11 @@ class AccountSearch extends Account
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
+        $dataProvider = new ActiveDataProvider(
+            [
             'query' => $query,
-        ]);
+            ]
+        );
 
         $this->load($params);
 
@@ -69,23 +71,33 @@ class AccountSearch extends Account
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+        $query->andFilterWhere(
+            [
             'account.id' => $this->id,
             'balance' => $this->balance,
             'user_id' => $this->user_id,
-        ])
-            ->andFilterWhere([
+            ]
+        )
+            ->andFilterWhere(
+                [
                 '>', 'balance', $this->minBalance,
-            ])
-            ->andFilterWhere([
+                ]
+            )
+            ->andFilterWhere(
+                [
                 '<', 'balance', $this->maxBalance,
-            ])
-            ->andFilterWhere([
+                ]
+            )
+            ->andFilterWhere(
+                [
                 'ilike', 'username', $this->username,
-            ])
-            ->andFilterWhere([
+                ]
+            )
+            ->andFilterWhere(
+                [
                 'ilike', 'email', $this->email,
-            ]);
+                ]
+            );
 
         return $dataProvider;
     }

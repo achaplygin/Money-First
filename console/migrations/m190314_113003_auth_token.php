@@ -18,8 +18,8 @@ class m190314_113003_auth_token extends Migration
     public function down()
     {
         $this->dropColumn(
-          'user',
-          'auth_token'
+            'user',
+            'auth_token'
         );
     }
 }

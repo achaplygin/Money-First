@@ -29,14 +29,16 @@ $this->params['breadcrumbs'][] = 'Update';
                 'password_reset_token',
                 'auth_token',
             ],
-        ]) ?>
+            ]
+        ) ?>
     </div>
 
     <div class="col-lg-4">
         <?= $this->render('_form', [
             'model' => $model,
-        ])
-        ?>
+            ]
+        )
+?>
     </div>
 
 </div>

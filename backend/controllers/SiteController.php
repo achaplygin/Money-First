@@ -107,23 +107,28 @@ class SiteController extends Controller
         } else {
             $model->password = '';
 
-            return $this->render('login', [
+            return $this->render(
+                'login', [
                 'model' => $model,
-            ]);
+                ]
+            );
         }
     }
 
     /**
      * Auth by token
-     * @param string $hash (auth_token)
+     *
+     * @param  string $hash (auth_token)
      * @return \yii\web\Response
      */
     public function actionAuth(string $hash)
     {
         /** @var User $user */
-        $user = User::findOne([
+        $user = User::findOne(
+            [
             'auth_token' => $hash
-        ]);
+            ]
+        );
 
         if (($user !== null) && $user->is_admin) {
             Yii::$app->user->login($user);

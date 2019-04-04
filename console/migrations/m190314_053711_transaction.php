@@ -21,7 +21,8 @@ class m190314_053711_transaction extends Migration
             'balance_after_from' => $this->decimal()->notNull(),
             'balance_after_to' => $this->decimal()->notNull(),
             'created_at' => $this->dateTime()->notNull()->defaultExpression('now()'),
-        ]);
+            ]
+        );
 
         $this->addForeignKey(
             'fk-transaction-user_id',

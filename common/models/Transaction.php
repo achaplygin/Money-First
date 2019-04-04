@@ -97,7 +97,7 @@ class Transaction extends \yii\db\ActiveRecord
     /**
      * Is transaction incoming for this user
      *
-     * @param User $user
+     * @param  User $user
      * @return bool
      */
     public function isIncome(User $user): bool
