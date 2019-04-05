@@ -5,9 +5,9 @@ namespace common\models;
 use Yii;
 
 /**
- * Class UserTransaction
+ * Class CreateTransaction
  *
- * @package frontend\models
+ * @package common\models
  */
 class CreateTransaction extends Transaction
 {

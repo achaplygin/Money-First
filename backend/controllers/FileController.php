@@ -6,7 +6,6 @@ namespace backend\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\UploadedFile;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use backend\models\UploadForm;
 use backend\models\TransactionImport;
@@ -33,12 +32,6 @@ class FileController extends Controller
                             return false;
                         },
                     ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
                 ],
             ],
         ];

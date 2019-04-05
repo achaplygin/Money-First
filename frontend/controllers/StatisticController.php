@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use common\models\User;
 use yii\web\Controller;
+use yii\filters\AccessControl;
 use common\models\Transaction;
 use yii\data\ActiveDataProvider;
 
@@ -13,6 +13,21 @@ use yii\data\ActiveDataProvider;
  */
 class StatisticController extends Controller
 {
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@']
+                    ],
+                ],
+            ],
+        ];
+    }
 
     /**
      * Index page of user's statistic.
@@ -30,12 +45,12 @@ class StatisticController extends Controller
 
         $dataProviderFrom = new ActiveDataProvider(
             [
-            'query' => $transactionsFrom,
-            'pagination' => [
-                'pageParam' => 'from-page',
-                'pageSize' => 10
-            ],
-            'sort' => false,
+                'query' => $transactionsFrom,
+                'pagination' => [
+                    'pageParam' => 'from-page',
+                    'pageSize' => 10
+                ],
+                'sort' => false,
             ]
         );
 
@@ -45,21 +60,21 @@ class StatisticController extends Controller
 
         $dataProviderTo = new ActiveDataProvider(
             [
-            'query' => $transactionsTo,
-            'pagination' => [
-                'pageParam' => 'to-page',
-                'pageSize' => 10
-            ],
-            'sort' => false,
+                'query' => $transactionsTo,
+                'pagination' => [
+                    'pageParam' => 'to-page',
+                    'pageSize' => 10
+                ],
+                'sort' => false,
             ]
         );
 
         return $this->render(
             'index', [
-            'dataProviderFrom' => $dataProviderFrom,
-            'dataProviderTo' => $dataProviderTo,
-            'amountFromSum' => $amountFromSum,
-            'amountToSum' => $amountToSum,
+                'dataProviderFrom' => $dataProviderFrom,
+                'dataProviderTo' => $dataProviderTo,
+                'amountFromSum' => $amountFromSum,
+                'amountToSum' => $amountToSum,
             ]
         );
     }

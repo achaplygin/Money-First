@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use common\models\Account;
 use yii\web\ForbiddenHttpException;
@@ -13,6 +14,22 @@ use common\models\CreateTransaction;
  */
 class TransactionController extends Controller
 {
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@']
+                    ],
+                ],
+            ],
+        ];
+    }
+
     /**
      * Loading user request, collecting required data and starting process of transaction doing.
      *
