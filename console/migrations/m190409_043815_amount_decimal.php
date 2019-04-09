@@ -13,6 +13,7 @@ class m190409_043815_amount_decimal extends Migration
     public function safeUp()
     {
         $this->alterColumn('transaction', 'amount', 'decimal(42,2)');
+        $this->alterColumn('account', 'balance', 'decimal(42,2)');
     }
 
     /**
@@ -21,5 +22,6 @@ class m190409_043815_amount_decimal extends Migration
     public function safeDown()
     {
         $this->alterColumn('transaction', 'amount', 'numeric(10)');
+        $this->alterColumn('account', 'balance', 'numeric(10)');
     }
 }
