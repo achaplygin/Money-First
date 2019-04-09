@@ -24,8 +24,8 @@ class TransactionHistory extends \yii\bootstrap\Widget
     {
         $history = Transaction::find()
             ->select('created_at, user_id, amount, account_from, account_to, balance_after_to, balance_after_from')
-            ->where(['account_from' => Account::findOne(['user_id' => Yii::$app->user->getId()])])
-            ->orWhere(['account_to' => Account::findOne(['user_id' => Yii::$app->user->getId()])])
+            ->andWhere(['account_from' => Account::findOne(['user_id' => Yii::$app->user->id])->id])
+            ->orWhere(['account_to' => Account::findOne(['user_id' => Yii::$app->user->id])->id])
             ->orderBy('created_at DESC');
         $this->dataProvider = new ActiveDataProvider(
             [

@@ -98,7 +98,7 @@ class TransactionImport extends Model
                     $res[$n]['account_from'] = (int)$value ?: null;
                     break;
                 case 'amount':
-                    $res[$n]['amount'] = (float) str_replace(',', '.', $value) ?: null;
+                    $res[$n]['amount'] = (float) $value ?: null;
                     break;
                 case 'created_at':
                     $res[$n]['created_at'] = (string)$value ?: null;
@@ -130,9 +130,6 @@ class TransactionImport extends Model
             $model->attributes = $item;
 
             if ($model->validate()) {
-                $message = $message.'_|_'.$i.'_it:_'.$item['amount'].'_';
-                $message = $message.'_|_'.$i.'_mo:_'.var_dump($model->amount).'_';
-                Yii::$app->session->setFlash('info', $message);
                 $model->saveTransaction();
             } else {
                 $strNum = $i + 2;
